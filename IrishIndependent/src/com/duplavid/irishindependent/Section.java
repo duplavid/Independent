@@ -5,6 +5,15 @@ import java.util.ArrayList;
 import android.graphics.Bitmap;
 import android.support.v4.util.LruCache;
 
+/**
+ * Main class for working with sections.
+ * After an Entry has been parsed, a Section can be populated.
+ * A Section holds the cache of that section -
+ * TODO should be rewritten to use only one cache, not many!
+ * 
+ * @author Eva Hajdu
+ *
+ */
 public class Section{
 	public ArrayList<String> descriptions;
 	public ArrayList<String> links;

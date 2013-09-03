@@ -9,6 +9,12 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+/**
+ * Main XML parser class to parse the RSS files
+ * Connects to Entry
+ * @author Eva Hajdu
+ *
+ */
 public class MainParser {
 	private static final String ns = null;
 	

@@ -1,5 +1,12 @@
 package com.duplavid.irishindependent;
 
+/**
+ * Connects to MainParser and MainActivity
+ * This class "stores" the basic information parsed from the RSS file
+ * 
+ * @author Eva Hajdu
+ *
+ */
 public class Entry {
     public final String title;
     public final String link;

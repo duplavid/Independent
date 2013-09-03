@@ -73,6 +73,8 @@ public class SingleArticleActivity extends Activity {
 	
 	class RetrieveArticle extends AsyncTask<String, Void, Elements>{
 		String picture = null;
+		Elements extraArticle = null;
+		
 		@Override
 		protected void onPreExecute() {
 			pd.setTitle("Loading...");
@@ -89,7 +91,13 @@ public class SingleArticleActivity extends Activity {
 			Document doc;
 			try {
 				doc = Jsoup.connect(urls[0]).get();
-				article = doc.select(".w50 p");
+				
+				if(doc.select(".byline") != null){
+					extraArticle = doc.select(".byline");
+				}
+				
+				article = doc.select(".w50 p:not(.byline)");
+				
 				if(doc.select(".imgWrapper img").first() != null){
 					picture = doc.select(".imgWrapper img").first().attr("src");
 				}
@@ -132,6 +140,18 @@ public class SingleArticleActivity extends Activity {
 				Typeface articletype=Typeface.createFromAsset(thiscontext.getAssets(),"fonts/DroidSerif-Regular.ttf");
 				a.setText(article);				
 				a.setTypeface(articletype);
+				
+				if(extraArticle != null){
+					StringBuilder byline = new StringBuilder();
+					for(int i=0;i<extraArticle.size();i++){
+						byline.append(extraArticle.get(i).text()+"");
+					}
+					
+					TextView b = (TextView)findViewById(R.id.byline);
+					Typeface btype=Typeface.createFromAsset(thiscontext.getAssets(),"fonts/DroidSerif-Bold.ttf");
+					b.setText(byline);				
+					b.setTypeface(btype);
+				}
 				
 				if(picture != null){
 					//Retrieve the picture

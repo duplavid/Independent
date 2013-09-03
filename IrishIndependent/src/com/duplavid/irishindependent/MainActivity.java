@@ -22,6 +22,15 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 
+/**
+ * Has menus (refresh and settings -> it connects to SetSectionsActivity)
+ * Oncreate -> connects to ExpandableListAdapter - populates the available sections
+ * Has inner class: DownloadWebPageTask for populating the sections with the links & picturelinks & descriptions & titles
+ * 
+ * @res exp_mainactivity
+ * @author Eva Hajdu
+ *
+ */
 public class MainActivity extends Activity {
 	public static Context thiscontext;
 	ArrayList<String> links;
@@ -58,7 +67,7 @@ public class MainActivity extends Activity {
 		
 		if(sections.size() == 0){
 			SetSectionsActivity.populateDatabase();
-			sections = db.getAllSections();
+			sections = db.getEnabledSections();
 			//Intent intent = new Intent(this, SetSectionsActivity.class);
 			//startActivity(intent);
 		}
@@ -87,34 +96,11 @@ public class MainActivity extends Activity {
 	public void onPause() {
 	    super.onPause();
 
-	    if(pd != null)
+	    if(pd != null){
 	    	pd.dismiss();
+	    }	
 	    pd = null;
-	}
-	
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.main, menu);
-	    return true;
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle item selection
-	    switch (item.getItemId()) {
-	    case R.id.action_refresh:
-	    	getRSS();
-	        return true;
-	    case R.id.action_settings:
-	    	settings();
-	        return true;
-	    default:
-	        return super.onOptionsItemSelected(item);
-	    }
-	}
-	
+	}	
 
 	public void getRSS() {
 		pd = new ProgressDialog(thiscontext);
@@ -122,6 +108,13 @@ public class MainActivity extends Activity {
 		task.execute(urls);
 	}
 
+	/**
+	 * Populates the static <Section> ArrayList with all things that are in the RSS.
+	 * Connects to MainParser
+	 * 
+	 * @author Eva Hajdu
+	 *
+	 */
 	private class DownloadWebPageTask extends AsyncTask<String, Void, String> {
 		private ArrayList<Section> objects;
 		
@@ -175,6 +168,12 @@ public class MainActivity extends Activity {
 		}
 	}
 	
+	/**
+	 * Connects to ExpandableListAdapter
+	 * Shows all available sections and their first 5 things.
+	 * listDataHeader -> list of the header titles
+	 * listDataChild -> List of the links
+	 */
 	public void showList(){
 		ArrayList<String> listDataHeader = new ArrayList<String>();
 		HashMap<String, List<String>> listDataChild = new HashMap<String, List<String>>();
@@ -196,10 +195,41 @@ public class MainActivity extends Activity {
 		
 	}
 	
+	/**
+	 * Set up menu
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.main, menu);
+	    return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+	    case R.id.action_refresh:
+	    	getRSS();
+	        return true;
+	    case R.id.action_settings:
+	    	settings();
+	        return true;
+	    default:
+	        return super.onOptionsItemSelected(item);
+	    }
+	}
+	
+	/**
+	 * Menumethod Refresh
+	 */
 	public void refresh(){
 		getRSS();
 	}
 	
+	/**
+	 * Menumethod Settings
+	 */
 	public void settings(){
 		Intent intent = new Intent(thiscontext, SetSectionsActivity.class);
 		startActivity(intent);

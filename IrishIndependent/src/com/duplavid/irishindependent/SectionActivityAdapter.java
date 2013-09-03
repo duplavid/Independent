@@ -14,6 +14,12 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+/**
+ * Connects to SetSectionsActivity
+ * @res activity_sections
+ * @author Eva Hajdu
+ *
+ */
 public class SectionActivityAdapter extends ArrayAdapter<String> {
 
 	private ArrayList<Section> sections;

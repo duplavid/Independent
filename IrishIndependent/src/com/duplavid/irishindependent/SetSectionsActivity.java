@@ -4,6 +4,16 @@ import java.util.ArrayList;
 import android.app.ListActivity;
 import android.os.Bundle;
 
+/**
+ * Connects to the Settings menu in MainActivity
+ * Connects to SectionActivityAdapter
+ * When starting this activity, it shows all sections with their availability
+ * It can populate the database with default values.
+ * 
+ * @res activity_sections
+ * @author Eva Hajdu
+ *
+ */
 public class SetSectionsActivity extends ListActivity {
 
 	static ArrayList<Section> sectionlist;
@@ -14,17 +24,20 @@ public class SetSectionsActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sections);
 		
-		db = MainActivity.db;
-		sectionlist = db.getAllSections();
-		
-		ArrayList<String> names = new ArrayList<String>();
-
-		for(int i=0; i<sectionlist.size();i++){
-			names.add(sectionlist.get(i).getFullName());
+		try{
+			db = MainActivity.db;
+			sectionlist = db.getAllSections();
+			
+			ArrayList<String> names = new ArrayList<String>();
+	
+			for(int i=0; i<sectionlist.size();i++){
+				names.add(sectionlist.get(i).getFullName());
+			}
+			
+			setListAdapter(new SectionActivityAdapter(this, names, sectionlist));
+		}catch(NullPointerException e){
+        	finish();
 		}
-		
-		setListAdapter(new SectionActivityAdapter(this, names, sectionlist));
-		
 		//TODO: megcsinalni a konkret listat
 		//TODO: lista akkor, ha nincs az adatbazisban semmi
 		//TODO: lista akkor, ha mar van az adatbazisban

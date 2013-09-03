@@ -70,11 +70,10 @@ public class CustomAdapter extends ArrayAdapter<String> {
 			final String imageKey = String.valueOf(position);
 		    final Bitmap bitmap = thisSection.getBitmapFromMemCache(imageKey);
 		    if (bitmap != null) {
-		    	@SuppressWarnings("deprecation")
-				Drawable drawable = (Drawable)new BitmapDrawable(bitmap); 
-		    	pics.setImageDrawable(drawable);
-		    	pics.getLayoutParams().height = 70;
-		    	pics.getLayoutParams().width = 70;
+		    	pics.setImageBitmap(bitmap);
+		    	pics.getLayoutParams().height = 150;
+		    	pics.getLayoutParams().width = 150;
+		    	pics.setPadding(15,7,0,20);
 		    } else {
 		    	RetreivePictureTask task = new RetreivePictureTask(pictures.get(position), pics, position);
 				task.execute(new String[] { pictures.get(position) });
@@ -130,8 +129,9 @@ public class CustomAdapter extends ArrayAdapter<String> {
 
 	    protected void onPostExecute(Drawable result) {
 	    	pics.setImageDrawable(result);
-	    	pics.getLayoutParams().height = 70;
-	    	pics.getLayoutParams().width = 70;
+	    	pics.getLayoutParams().height = 150;
+	    	pics.getLayoutParams().width = 150;
+	    	pics.setPadding(15,7,0,20);
 	    	Bitmap bitmap = ((BitmapDrawable) result).getBitmap();
 	    	thisSection.addBitmapToMemoryCache(position.toString(), bitmap);    	
 	    }

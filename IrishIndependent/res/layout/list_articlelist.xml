@@ -25,13 +25,13 @@
 	        	android:layout_width="fill_parent" >
 		        <ImageView
 		            android:id="@+id/pictureRow"
-		            android:paddingLeft="10dp"
+		            android:paddingTop="5dp"
 		            android:paddingBottom="10dp"
 		            android:contentDescription="@string/rowImage" />
 		        <TextView
 		            android:id="@+id/descriptionRow"
                 	android:layout_weight="1" 
-		            android:paddingLeft="10dp"
+                	android:paddingLeft="10dp"
 		            android:paddingRight="10dp"
 		            android:paddingBottom="10dp"
 					android:textAppearance="?android:attr/textAppearanceSmall"

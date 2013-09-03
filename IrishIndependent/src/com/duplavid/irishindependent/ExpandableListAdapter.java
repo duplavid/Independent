@@ -24,6 +24,14 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
  
+/**
+ * Connects to MainActivity
+ * Shows sections with their children (articles)
+ * 
+ * @res list_articlelist, list_header
+ * @author Eva Hajdu
+ *
+ */
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
 	
     private Context _context;
@@ -75,9 +83,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 			final String imageKey = String.valueOf(childPosition);
 		    final Bitmap bitmap = MainActivity.sections.get(groupPosition).getBitmapFromMemCache(imageKey);
 		    if (bitmap != null) {
-		    	@SuppressWarnings("deprecation")
-				Drawable drawable = (Drawable)new BitmapDrawable(bitmap); 
-		    	pics.setImageDrawable(drawable);
+		    	pics.setImageBitmap(bitmap);
+		    	pics.getLayoutParams().height = 150;
+		    	pics.getLayoutParams().width = 150;
+		    	pics.setPadding(15,7,0,20);
 		    } else {
 		    	RetreivePictureTask task = new RetreivePictureTask(pictures.get(childPosition), pics, childPosition, groupPosition);
 				task.execute(new String[] { pictures.get(childPosition) });
@@ -203,6 +212,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
 	    protected void onPostExecute(Drawable result) {
 	    	pics.setImageDrawable(result);
+	    	pics.getLayoutParams().height = 150;
+	    	pics.getLayoutParams().width = 150;
+	    	pics.setPadding(15,7,0,20);
 	    	Bitmap bitmap = ((BitmapDrawable) result).getBitmap();
 	    	MainActivity.sections.get(groupPosition).addBitmapToMemoryCache(position.toString(), bitmap);    	
 	    }
