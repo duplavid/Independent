@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -68,7 +67,7 @@ public class CustomAdapter extends ArrayAdapter<String> {
 		
 		if(pictures.get(position) != null){
 			final String imageKey = String.valueOf(position);
-		    final Bitmap bitmap = MainActivity.getBitmapFromMemCache(imageKey);
+		    final Bitmap bitmap = MainActivity.getBitmapFromMemCache(String.valueOf(sectionid)+"_"+imageKey);
 		    if (bitmap != null) {
 		    	pics.setImageBitmap(bitmap);
 		    	pics.getLayoutParams().height = 150;
@@ -80,13 +79,10 @@ public class CustomAdapter extends ArrayAdapter<String> {
 		    }
 		}
 		
-		Typeface typeface=Typeface.createFromAsset(context.getAssets(),"fonts/DroidSerif-Regular.ttf");
-		title.setTypeface(typeface);
+		title.setTypeface(MainActivity.Regular);
 		title.setText(titles.get(position));
 		
-		Typeface desctype=Typeface.createFromAsset(context.getAssets(),"fonts/Myriad Pro Regular.ttf");
 		description.setText(descriptions.get(position));
-		description.setTypeface(desctype);
 		
 		rowView.setOnClickListener(new OnClickListener() {
 			@Override
@@ -100,6 +96,7 @@ public class CustomAdapter extends ArrayAdapter<String> {
 		        i.putExtra("lead", lead);
 		        i.putExtra("title", title);
 		        i.putExtra("groupPosition", sectionid);
+		        i.putExtra("childPosition", Integer.toString(position));
 		        context.startActivity(i);
 		    }
 		});

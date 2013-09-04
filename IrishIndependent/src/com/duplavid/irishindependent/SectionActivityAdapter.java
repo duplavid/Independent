@@ -3,9 +3,6 @@ package com.duplavid.irishindependent;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,8 +41,7 @@ public class SectionActivityAdapter extends ArrayAdapter<String> {
 		View rowView = inflater.inflate(layout, parent, false);
 		
 		TextView title = (TextView) rowView.findViewById(R.id.headerrow);
-		Typeface typeface=Typeface.createFromAsset(context.getAssets(),"fonts/DroidSerif-Regular.ttf");
-		title.setTypeface(typeface);
+		title.setTypeface(MainActivity.Regular);
 		title.setText(sections.get(position).getFullName());
 		
 		final CheckBox checkBox = (CheckBox) rowView.findViewById(R.id.checkboxrow);

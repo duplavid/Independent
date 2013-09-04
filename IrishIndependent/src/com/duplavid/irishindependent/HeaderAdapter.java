@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,8 +36,7 @@ public class HeaderAdapter extends ArrayAdapter<String>{
 		TextView header = (TextView) rowView.findViewById(R.id.list_header_title);
 		header.setBackgroundColor(Color.parseColor(MainActivity.sections.get(Integer.parseInt(sectionid)).getColor()));
 		header.setText(this.items.get(position));
-		Typeface typeface=Typeface.createFromAsset(context.getAssets(),"fonts/DroidSerif-Regular.ttf");
-		header.setTypeface(typeface);
+		header.setTypeface(MainActivity.Regular);
 		
 		return rowView;
 	}

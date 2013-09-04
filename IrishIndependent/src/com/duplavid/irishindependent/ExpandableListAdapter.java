@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -96,14 +95,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 		    }
 		}
 		
-		//Typeface typeface=Typeface.createFromAsset(this._context.getAssets(),"fonts/DroidSerif-Regular.ttf");
-		//title.setTypeface(typeface);
+		title.setTypeface(MainActivity.Regular);
 		title.setText(titles.get(childPosition));
 		
-		//Typeface desctype=Typeface.createFromAsset(this._context.getAssets(),"fonts/Myriad Pro Regular.ttf");
 		description.setText(descriptions.get(childPosition));
-		//description.setTypeface(desctype);
-		
 		
 		rowView.setOnClickListener(new OnClickListener() {
 			@Override
@@ -117,6 +112,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 		        i.putExtra("lead", lead);
 		        i.putExtra("title", title);
 		        i.putExtra("groupPosition", Integer.toString(groupPosition));
+		        i.putExtra("childPosition", Integer.toString(childPosition));
 		        v.getContext().startActivity(i);
 		    }
 		});
@@ -165,8 +161,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 		
 		header.setBackgroundColor(Color.parseColor(MainActivity.sections.get(groupPosition).getColor()));
 		header.setText(MainActivity.sections.get(groupPosition).getFullName());
-		//Typeface typeface=Typeface.createFromAsset(this._context.getAssets(),"fonts/DroidSerif-Regular.ttf");
-		//header.setTypeface(typeface);
+		
+		header.setTypeface(MainActivity.Regular);
 		
 		img.setOnClickListener(new OnClickListener() {
 			@Override

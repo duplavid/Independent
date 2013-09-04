@@ -1,5 +1,6 @@
 package com.duplavid.irishindependent;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +25,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 
 /**
  * Has menus (refresh and settings -> it connects to SetSectionsActivity)
@@ -50,6 +52,10 @@ public class MainActivity extends Activity {
 	final static int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
     final static int cacheSize = maxMemory / 8;
     
+    public static Typeface Regular;
+    public static Typeface Bold;
+    public static Typeface Italic;
+    
     private static LruCache<String, Bitmap> mMemoryCache = new LruCache<String, Bitmap>(1024 * 1024 * 2) {
 		@Override
 		public int sizeOf(String key, Bitmap value) {
@@ -67,8 +73,8 @@ public class MainActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		setContentView(R.layout.exp_mainactivity);
+		
 		expListView = (ExpandableListView) findViewById(R.id.lvExp);
 		
 		pd = new ProgressDialog(this.getApplicationContext());
@@ -94,6 +100,11 @@ public class MainActivity extends Activity {
 			i++;
 		}
 
+		//Set typefaces
+		Regular = Typeface.createFromAsset(this.getAssets(),"fonts/DroidSerif-Regular.ttf");
+		Bold = Typeface.createFromAsset(this.getAssets(),"fonts/DroidSerif-Bold.ttf");
+		Italic = Typeface.createFromAsset(this.getAssets(),"fonts/DroidSerif-Italic.ttf");
+		
 		getRSS();
 		
 	}
@@ -114,6 +125,8 @@ public class MainActivity extends Activity {
 	}	
 
 	public void getRSS() {
+		//Delete the cache every time we refresh the RSS
+		clearApplicationData();
 		pd = new ProgressDialog(this);
 		DownloadWebPageTask task = new DownloadWebPageTask(sections);
 		task.execute(urls);
@@ -256,6 +269,34 @@ public class MainActivity extends Activity {
 	public static Bitmap getBitmapFromMemCache(String key) {
 	    return mMemoryCache.get(key);
 	}
+	
+	//Delete file cache
+	public void clearApplicationData() {
+		File cache = getCacheDir();
+		File appDir = new File(cache.getParent());
+		if(appDir.exists()){
+			String[] children = appDir.list();
+			for(String s : children){
+				if(!s.equals("lib")){
+					deleteDir(new File(appDir, s));
+				}
+			}
+		}
+	}
+	 
+	public static boolean deleteDir(File dir) {
+		if (dir != null && dir.isDirectory()) {
+			String[] children = dir.list();
+			for (int i = 0; i < children.length; i++) {
+				boolean success = deleteDir(new File(dir, children[i]));
+				if (!success) {
+					return false;
+				}
+			}
+		}
+		return dir.delete();
+	}
+
 	
 
 }

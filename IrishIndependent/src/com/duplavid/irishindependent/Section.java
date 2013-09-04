@@ -2,8 +2,6 @@ package com.duplavid.irishindependent;
 
 import java.util.ArrayList;
 
-import android.graphics.Bitmap;
-import android.support.v4.util.LruCache;
 
 /**
  * Main class for working with sections.
@@ -29,8 +27,6 @@ public class Section{
 	
     // Empty constructor
     public Section(){
-
-	    
     	descriptions = new ArrayList<String>();
 		links = new ArrayList<String>();
 		titles = new ArrayList<String>();
@@ -39,8 +35,6 @@ public class Section{
     }
     
 	public Section(int id, String name, String fullname, String color, String url, boolean state){
-
-		
 		descriptions = new ArrayList<String>();
 		links = new ArrayList<String>();
 		titles = new ArrayList<String>();
@@ -54,8 +48,6 @@ public class Section{
 	}
 	
 	public Section(String name, String fullname, String color, String url, boolean state){
-
-		
 		descriptions = new ArrayList<String>();
 		links = new ArrayList<String>();
 		titles = new ArrayList<String>();
