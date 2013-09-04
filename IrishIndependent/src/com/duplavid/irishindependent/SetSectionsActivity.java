@@ -26,6 +26,7 @@ public class SetSectionsActivity extends ListActivity {
 		
 		try{
 			db = MainActivity.db;
+			sectionlist = new ArrayList<Section>();
 			sectionlist = db.getAllSections();
 			
 			ArrayList<String> names = new ArrayList<String>();
@@ -67,10 +68,6 @@ public class SetSectionsActivity extends ListActivity {
 		db.addSection(Beauty);
 		db.addSection(Love);
 		db.addSection(Health);
-	}
-	
-	public void saveList(){
-		
 	}
 	
 }

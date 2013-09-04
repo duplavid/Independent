@@ -18,8 +18,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -56,6 +54,8 @@ public class MainActivity extends Activity {
     public static Typeface Bold;
     public static Typeface Italic;
     
+    public static Context thiscontext;
+    
     private static LruCache<String, Bitmap> mMemoryCache = new LruCache<String, Bitmap>(1024 * 1024 * 2) {
 		@Override
 		public int sizeOf(String key, Bitmap value) {
@@ -74,31 +74,11 @@ public class MainActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.exp_mainactivity);
-		
+		thiscontext = this;
 		expListView = (ExpandableListView) findViewById(R.id.lvExp);
 		
 		pd = new ProgressDialog(this.getApplicationContext());
 		db = new DatabaseHandler(this);
-		sections = new ArrayList<Section>();
-		sections = db.getEnabledSections();
-		
-		//TODO: elso bejelentkezes!
-		
-		if(sections.size() == 0){
-			SetSectionsActivity.populateDatabase();
-			sections = db.getEnabledSections();
-			//Intent intent = new Intent(this, SetSectionsActivity.class);
-			//startActivity(intent);
-		}
-		
-		int size = sections.size();
-		urls = new String[size];
-		int i = 0;
-
-		for(Section sec : sections){
-			urls[i] = sec.getUrl();
-			i++;
-		}
 
 		//Set typefaces
 		Regular = Typeface.createFromAsset(this.getAssets(),"fonts/DroidSerif-Regular.ttf");
@@ -122,9 +102,34 @@ public class MainActivity extends Activity {
 	    	pd.dismiss();
 	    }	
 	    pd = null;
-	}	
+	}
+	
+	public void setSections(){
+		sections = new ArrayList<Section>();
+		sections = db.getEnabledSections();
+		
+		//TODO: elso bejelentkezes!
+		
+		if(sections.size() == 0){
+			SetSectionsActivity.populateDatabase();
+			sections = db.getEnabledSections();
+			//Intent intent = new Intent(this, SetSectionsActivity.class);
+			//startActivity(intent);
+		}
+		
+		int size = sections.size();
+		urls = new String[size];
+		int i = 0;
+
+		for(Section sec : sections){
+			urls[i] = sec.getUrl();
+			i++;
+		}
+	}
 
 	public void getRSS() {
+		setSections();
+		
 		//Delete the cache every time we refresh the RSS
 		clearApplicationData();
 		pd = new ProgressDialog(this);
@@ -255,7 +260,7 @@ public class MainActivity extends Activity {
 	 * Menumethod Settings
 	 */
 	public void settings(){
-		Intent intent = new Intent(this, SetSectionsActivity.class);
+		Intent intent = new Intent(this.getApplicationContext(), SetSectionsActivity.class);
 		startActivity(intent);
 	}
 	
@@ -277,7 +282,7 @@ public class MainActivity extends Activity {
 		if(appDir.exists()){
 			String[] children = appDir.list();
 			for(String s : children){
-				if(!s.equals("lib")){
+				if(s.equals("cache")){
 					deleteDir(new File(appDir, s));
 				}
 			}

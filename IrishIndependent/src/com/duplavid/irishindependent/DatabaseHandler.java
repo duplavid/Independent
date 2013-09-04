@@ -1,8 +1,5 @@
 package com.duplavid.irishindependent;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -185,8 +182,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return expenseList;
     }
  */
-    // Updating single expense
-    public int updateExpense(Section section) {
+    // Updating single section
+    public int updateSection(Section section) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -198,6 +195,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // updating row
         return db.update(TABLE_SECTIONS, values, KEY_ID + " = ?",
                 new String[] { String.valueOf(section.getID()) });
+    }
+    
+    public int updateState(int id, boolean state){
+    	SQLiteDatabase db = this.getWritableDatabase();
+    	ContentValues values = new ContentValues();
+    	values.put(KEY_STATE, boolToInt(state));
+    	
+        return db.update(TABLE_SECTIONS, values, KEY_ID + " = ?",
+                new String[] { String.valueOf(id)});
     }
     
     public int boolToInt(boolean b) {

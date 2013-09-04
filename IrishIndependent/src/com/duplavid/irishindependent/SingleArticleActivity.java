@@ -3,7 +3,6 @@ package com.duplavid.irishindependent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -30,7 +29,8 @@ import android.widget.TextView;
 /**
  * Shows a single article.
  * If the article fails to load, it tries again once.
- * Creates a cache file with the groupPosition and childPosition.
+ * Creates three cache files with the groupPosition and childPosition.
+ * Caches article, byline and picture source.
  * 
  * @author Eva Hajdu
  *
@@ -76,14 +76,20 @@ public class SingleArticleActivity extends Activity {
     		l.setText(lead);
     		l.setTypeface(MainActivity.Italic);
             
-    		//Get the article itself
+    		//Get the article, byline and piclink itself
     		BufferedReader in = null;
+    		BufferedReader ln = null;
+    		BufferedReader bn = null;
     		String line;
-    		StringBuilder stringBuilder = new StringBuilder();
+    		StringBuilder articleBuilder = new StringBuilder();
+    		StringBuilder picBuilder = new StringBuilder();
+    		StringBuilder bylineBuilder = new StringBuilder();
+    		
+    		//Get article from cache
             try {
                 in = new BufferedReader(new FileReader(new File(thiscontext.getCacheDir(), groupPosition+"_"+childPosition)));
-                while ((line = in.readLine()) != null) stringBuilder.append(line+"\n");
-                createArticle(stringBuilder);                
+                while ((line = in.readLine()) != null) articleBuilder.append(line+"\n");
+                createArticle(articleBuilder);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 RetrieveArticle task = new RetrieveArticle();
@@ -91,6 +97,28 @@ public class SingleArticleActivity extends Activity {
             } catch (IOException e) {
             	e.printStackTrace();
             }
+            
+            //Get byline
+            try{
+            	bn = new BufferedReader(new FileReader(new File(thiscontext.getCacheDir(), "byline_"+groupPosition+"_"+childPosition)));
+            	while ((line = bn.readLine()) != null) bylineBuilder.append(line);
+                getByline(bylineBuilder);
+            }catch(FileNotFoundException e){
+            	e.printStackTrace();
+            } catch (IOException e) {
+				e.printStackTrace();
+			}
+            
+            //Get picture
+            try{
+            	ln = new BufferedReader(new FileReader(new File(thiscontext.getCacheDir(), "piclink_"+groupPosition+"_"+childPosition)));
+            	while ((line = ln.readLine()) != null) picBuilder.append(line);
+                getPic(picBuilder);
+            }catch(FileNotFoundException e){
+            	e.printStackTrace();
+            } catch (IOException e) {
+				e.printStackTrace();
+			}
     		
         }catch(NullPointerException e){
         	finish();
@@ -113,6 +141,24 @@ public class SingleArticleActivity extends Activity {
 		a.setTypeface(MainActivity.Regular);
 	}
 	
+	public void getPic(StringBuilder piclink){
+		ImageView img = (ImageView)findViewById(R.id.articleimage);
+		RetreivePictureTask task = new RetreivePictureTask(img);
+		task.execute(new String[] { piclink.toString() });
+	}
+	
+	public void getPic(String piclink){
+		ImageView img = (ImageView)findViewById(R.id.articleimage);
+		RetreivePictureTask task = new RetreivePictureTask(img);
+		task.execute(new String[] { piclink });
+	}
+	
+	public void getByline(StringBuilder byline){
+		TextView b = (TextView)findViewById(R.id.byline);
+		b.setText(byline);				
+		b.setTypeface(MainActivity.Bold);
+	}
+	
 	class RetrieveArticle extends AsyncTask<String, Void, Elements>{
 		String picture = null;
 		Elements extraArticle = null;
@@ -129,7 +175,6 @@ public class SingleArticleActivity extends Activity {
 		@Override
 		protected Elements doInBackground(String... urls) {
 			Elements article = null;
-			// TODO Auto-generated method stub
 			Document doc;
 			try {
 				doc = Jsoup.connect(urls[0]).get();
@@ -144,7 +189,6 @@ public class SingleArticleActivity extends Activity {
 					picture = doc.select(".imgWrapper img").first().attr("src");
 				}
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				countTry++;
 				if(countTry > 1){
@@ -206,17 +250,33 @@ public class SingleArticleActivity extends Activity {
 						byline.append(extraArticle.get(i).text()+"");
 					}
 					
-					TextView b = (TextView)findViewById(R.id.byline);
-					b.setText(byline);				
-					b.setTypeface(MainActivity.Bold);
+					getByline(byline);
+					
+					//Save byline in file
+					try {
+				        String filename = "byline_"+groupPosition+"_"+childPosition;			        
+				        FileWriter out = new FileWriter(new File(thiscontext.getCacheDir(), filename));
+			            out.write(byline.toString());
+			            out.close();
+				    }catch (IOException e) {
+				        e.printStackTrace();
+				    }
 				}
 				
 				//Get picture
 				if(picture != null){
 					//Retrieve the picture
-					ImageView img = (ImageView)findViewById(R.id.articleimage);
-					RetreivePictureTask task = new RetreivePictureTask(img);
-					task.execute(new String[] { picture });
+					getPic(picture);
+					
+					//Save picture in file
+					try {
+				        String filename = "piclink_"+groupPosition+"_"+childPosition;			        
+				        FileWriter out = new FileWriter(new File(thiscontext.getCacheDir(), filename));
+			            out.write(picture);
+			            out.close();
+				    }catch (IOException e) {
+				        e.printStackTrace();
+				    }
 				}
 			}
 		}

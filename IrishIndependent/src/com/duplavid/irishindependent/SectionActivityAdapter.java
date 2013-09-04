@@ -52,9 +52,11 @@ public class SectionActivityAdapter extends ArrayAdapter<String> {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 if(checkBox.isChecked()){
-                    System.out.println(position+" Checked");
+                	MainActivity.db.updateState((position+1), true);
+                    System.out.println((position+1)+" Checked");
                 }else{
-                    System.out.println(position+" Un-Checked");
+                	MainActivity.db.updateState((position+1), false);
+                    System.out.println((position+1)+" Un-Checked");
                 }
             }
         });
