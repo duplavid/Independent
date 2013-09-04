@@ -75,31 +75,34 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 		layout = R.layout.list_articlelist;
 		
 		View rowView = inflater.inflate(layout, parent, false);
+		
 		TextView title = (TextView) rowView.findViewById(R.id.titleRow);
 		TextView description = (TextView) rowView.findViewById(R.id.descriptionRow);
 		ImageView pics = (ImageView) rowView.findViewById(R.id.pictureRow);
 		
 		if(pictures.get(childPosition) != null){
-			final String imageKey = String.valueOf(childPosition);
-		    final Bitmap bitmap = MainActivity.sections.get(groupPosition).getBitmapFromMemCache(imageKey);
+			final String posKey = String.valueOf(childPosition);
+			final String groupKey = String.valueOf(groupPosition);
+		    Bitmap bitmap = MainActivity.getBitmapFromMemCache(groupKey+'_'+posKey);
 		    if (bitmap != null) {
 		    	pics.setImageBitmap(bitmap);
 		    	pics.getLayoutParams().height = 150;
 		    	pics.getLayoutParams().width = 150;
 		    	pics.setPadding(15,7,0,20);
+		    	bitmap = null;
 		    } else {
 		    	RetreivePictureTask task = new RetreivePictureTask(pictures.get(childPosition), pics, childPosition, groupPosition);
 				task.execute(new String[] { pictures.get(childPosition) });
 		    }
 		}
 		
-		Typeface typeface=Typeface.createFromAsset(this._context.getAssets(),"fonts/DroidSerif-Regular.ttf");
-		title.setTypeface(typeface);
+		//Typeface typeface=Typeface.createFromAsset(this._context.getAssets(),"fonts/DroidSerif-Regular.ttf");
+		//title.setTypeface(typeface);
 		title.setText(titles.get(childPosition));
 		
-		Typeface desctype=Typeface.createFromAsset(this._context.getAssets(),"fonts/Myriad Pro Regular.ttf");
+		//Typeface desctype=Typeface.createFromAsset(this._context.getAssets(),"fonts/Myriad Pro Regular.ttf");
 		description.setText(descriptions.get(childPosition));
-		description.setTypeface(desctype);
+		//description.setTypeface(desctype);
 		
 		
 		rowView.setOnClickListener(new OnClickListener() {
@@ -109,12 +112,12 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 				String lead = MainActivity.sections.get(groupPosition).getFirst5Desc().get(childPosition);
 				String title = MainActivity.sections.get(groupPosition).getFirst5Titles().get(childPosition);
 				
-				Intent i = new Intent(MainActivity.thiscontext, SingleArticleActivity.class);
+				Intent i = new Intent(v.getContext(), SingleArticleActivity.class);
 		        i.putExtra("link", article);
 		        i.putExtra("lead", lead);
 		        i.putExtra("title", title);
 		        i.putExtra("groupPosition", Integer.toString(groupPosition));
-		        MainActivity.thiscontext.startActivity(i);
+		        v.getContext().startActivity(i);
 		    }
 		});
 		
@@ -152,6 +155,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         convertView = inflater.inflate(R.layout.list_header, null);
         layout = R.layout.list_header;
         View rowView = inflater.inflate(layout, parent, false);
+        
         TextView header = (TextView) rowView.findViewById(R.id.list_header_title);
         TextView nav = (TextView) rowView.findViewById(R.id.list_header_empty);
         nav.setBackgroundColor(Color.parseColor(MainActivity.sections.get(groupPosition).getColor()));
@@ -161,20 +165,20 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 		
 		header.setBackgroundColor(Color.parseColor(MainActivity.sections.get(groupPosition).getColor()));
 		header.setText(MainActivity.sections.get(groupPosition).getFullName());
-		Typeface typeface=Typeface.createFromAsset(this._context.getAssets(),"fonts/DroidSerif-Regular.ttf");
-		header.setTypeface(typeface);
+		//Typeface typeface=Typeface.createFromAsset(this._context.getAssets(),"fonts/DroidSerif-Regular.ttf");
+		//header.setTypeface(typeface);
 		
 		img.setOnClickListener(new OnClickListener() {
 			@Override
 		    public void onClick(View v) {
-		    	Intent i = new Intent(MainActivity.thiscontext, SingleSectionActivity.class);
+		    	Intent i = new Intent(v.getContext(), SingleSectionActivity.class);
 		    	i.putExtra("sectionid", Integer.toString(groupPosition));
-		    	MainActivity.thiscontext.startActivity(i);
+		    	v.getContext().startActivity(i);
 		    }
 		});
 		
-		
 		return rowView;
+		
         
     }
  
@@ -216,7 +220,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 	    	pics.getLayoutParams().width = 150;
 	    	pics.setPadding(15,7,0,20);
 	    	Bitmap bitmap = ((BitmapDrawable) result).getBitmap();
-	    	MainActivity.sections.get(groupPosition).addBitmapToMemoryCache(position.toString(), bitmap);    	
+	    	MainActivity.addBitmapToMemoryCache(groupPosition.toString()+'_'+position.toString(), bitmap);
+	    	bitmap = null;
 	    }
 	    
 	    private Drawable ImageOperations(String url) {

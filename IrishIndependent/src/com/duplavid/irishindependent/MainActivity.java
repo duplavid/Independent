@@ -12,15 +12,18 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.util.LruCache;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 
 /**
  * Has menus (refresh and settings -> it connects to SetSectionsActivity)
@@ -32,7 +35,6 @@ import android.content.Intent;
  *
  */
 public class MainActivity extends Activity {
-	public static Context thiscontext;
 	ArrayList<String> links;
 	String [] urls;
 	public final static String ITEM_TITLE = "title";
@@ -45,6 +47,16 @@ public class MainActivity extends Activity {
     
 	public ProgressDialog pd;
 	
+	final static int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+    final static int cacheSize = maxMemory / 8;
+    
+    private static LruCache<String, Bitmap> mMemoryCache = new LruCache<String, Bitmap>(1024 * 1024 * 2) {
+		@Override
+		public int sizeOf(String key, Bitmap value) {
+			return value.getRowBytes() * value.getHeight();
+		}
+	};
+	
 	public Map<String,?> createItem(String title, String caption) {
 		Map<String, String> item = new HashMap<String, String>();
 		item.put(ITEM_TITLE, title);
@@ -55,6 +67,7 @@ public class MainActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.exp_mainactivity);
 		expListView = (ExpandableListView) findViewById(R.id.lvExp);
 		
@@ -71,8 +84,6 @@ public class MainActivity extends Activity {
 			//Intent intent = new Intent(this, SetSectionsActivity.class);
 			//startActivity(intent);
 		}
-		
-		thiscontext = this;
 		
 		int size = sections.size();
 		urls = new String[size];
@@ -103,7 +114,7 @@ public class MainActivity extends Activity {
 	}	
 
 	public void getRSS() {
-		pd = new ProgressDialog(thiscontext);
+		pd = new ProgressDialog(this);
 		DownloadWebPageTask task = new DownloadWebPageTask(sections);
 		task.execute(urls);
 	}
@@ -189,7 +200,7 @@ public class MainActivity extends Activity {
 			
 			listDataChild.put(listDataHeader.get(i), links);
 		}
-		
+
 		listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
         expListView.setAdapter(listAdapter);
 		
@@ -231,8 +242,20 @@ public class MainActivity extends Activity {
 	 * Menumethod Settings
 	 */
 	public void settings(){
-		Intent intent = new Intent(thiscontext, SetSectionsActivity.class);
+		Intent intent = new Intent(this, SetSectionsActivity.class);
 		startActivity(intent);
 	}
+	
+	//Caching images
+	public static void addBitmapToMemoryCache(String key, Bitmap bitmap) {
+	    if (getBitmapFromMemCache(key) == null) {
+	        mMemoryCache.put(key, bitmap);
+	    }
+	}
+
+	public static Bitmap getBitmapFromMemCache(String key) {
+	    return mMemoryCache.get(key);
+	}
+	
 
 }

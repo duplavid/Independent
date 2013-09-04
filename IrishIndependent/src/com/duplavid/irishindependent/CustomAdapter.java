@@ -68,14 +68,14 @@ public class CustomAdapter extends ArrayAdapter<String> {
 		
 		if(pictures.get(position) != null){
 			final String imageKey = String.valueOf(position);
-		    final Bitmap bitmap = thisSection.getBitmapFromMemCache(imageKey);
+		    final Bitmap bitmap = MainActivity.getBitmapFromMemCache(imageKey);
 		    if (bitmap != null) {
 		    	pics.setImageBitmap(bitmap);
 		    	pics.getLayoutParams().height = 150;
 		    	pics.getLayoutParams().width = 150;
 		    	pics.setPadding(15,7,0,20);
 		    } else {
-		    	RetreivePictureTask task = new RetreivePictureTask(pictures.get(position), pics, position);
+		    	RetreivePictureTask task = new RetreivePictureTask(pictures.get(position), pics, position, Integer.parseInt(sectionid));
 				task.execute(new String[] { pictures.get(position) });
 		    }
 		}
@@ -110,10 +110,12 @@ public class CustomAdapter extends ArrayAdapter<String> {
 	class RetreivePictureTask extends AsyncTask<String, Void, Drawable> {
 	    private ImageView pics;
 	    private Integer position;
+	    private Integer groupPosition;
 
-	    public RetreivePictureTask(String url, ImageView pics, Integer position){
+	    public RetreivePictureTask(String url, ImageView pics, Integer position, Integer groupPosition){
 	    	this.pics = pics;
 	    	this.position = position;
+	    	this.groupPosition = groupPosition;
 	    }
 	    
 	    protected Drawable doInBackground(String... urls) {
@@ -133,7 +135,7 @@ public class CustomAdapter extends ArrayAdapter<String> {
 	    	pics.getLayoutParams().width = 150;
 	    	pics.setPadding(15,7,0,20);
 	    	Bitmap bitmap = ((BitmapDrawable) result).getBitmap();
-	    	thisSection.addBitmapToMemoryCache(position.toString(), bitmap);    	
+	    	MainActivity.addBitmapToMemoryCache(groupPosition.toString()+'_'+position.toString(), bitmap);    	
 	    }
 	    
 	    private Drawable ImageOperations(String url) {

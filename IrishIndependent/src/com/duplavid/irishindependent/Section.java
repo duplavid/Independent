@@ -27,19 +27,9 @@ public class Section{
 	public String url;
 	public boolean state;
 	
-	private LruCache<String, Bitmap> mMemoryCache;
-	
     // Empty constructor
     public Section(){
-		//Create cache
-		final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-	    final int cacheSize = maxMemory / 8;
-	    mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
-	        @Override
-	        protected int sizeOf(String key, Bitmap bitmap) {
-	            return bitmap.getByteCount() / 1024;
-	        }
-	    };
+
 	    
     	descriptions = new ArrayList<String>();
 		links = new ArrayList<String>();
@@ -49,15 +39,7 @@ public class Section{
     }
     
 	public Section(int id, String name, String fullname, String color, String url, boolean state){
-		//Create cache
-		final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-	    final int cacheSize = maxMemory / 8;
-	    mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
-	        @Override
-	        protected int sizeOf(String key, Bitmap bitmap) {
-	            return bitmap.getByteCount() / 1024;
-	        }
-	    };
+
 		
 		descriptions = new ArrayList<String>();
 		links = new ArrayList<String>();
@@ -72,15 +54,7 @@ public class Section{
 	}
 	
 	public Section(String name, String fullname, String color, String url, boolean state){
-		//Create cache
-		final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-	    final int cacheSize = maxMemory / 8;
-	    mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
-	        @Override
-	        protected int sizeOf(String key, Bitmap bitmap) {
-	            return bitmap.getByteCount() / 1024;
-	        }
-	    };
+
 		
 		descriptions = new ArrayList<String>();
 		links = new ArrayList<String>();
@@ -194,15 +168,5 @@ public class Section{
 	}
 
 	
-	//Caching images
-	public void addBitmapToMemoryCache(String key, Bitmap bitmap) {
-	    if (getBitmapFromMemCache(key) == null) {
-	        mMemoryCache.put(key, bitmap);
-	    }
-	}
-
-	public Bitmap getBitmapFromMemCache(String key) {
-	    return mMemoryCache.get(key);
-	}
 	
 }
