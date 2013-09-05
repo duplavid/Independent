@@ -24,7 +24,6 @@ public class SingleSectionActivity extends Activity {
 			
 			Section thissection = MainActivity.sections.get(Integer.parseInt(sectionid));
 			
-			setTitle(thissection.getFullName());
 			View titleView = getWindow().findViewById(android.R.id.title);
 			if (titleView != null) {
 			  ViewParent parent = titleView.getParent();
@@ -52,9 +51,10 @@ public class SingleSectionActivity extends Activity {
 			this.setContentView(lst);
 		}catch(NullPointerException e){
 			finish();
-		}
-
-		
-		
+		}	
+	}
+	
+	public void getBackToMain(View v){
+		finish();
 	}
 }

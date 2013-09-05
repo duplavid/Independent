@@ -2,7 +2,9 @@ package com.duplavid.irishindependent;
 
 import java.util.ArrayList;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 /**
  * Connects to the Settings menu in MainActivity
@@ -69,5 +71,13 @@ public class SetSectionsActivity extends ListActivity {
 		db.addSection(Love);
 		db.addSection(Health);
 	}
+	
+	public void getBackToMain(View v){
+		Intent main = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(main);
+        
+        finish();
+	}
+	
 	
 }

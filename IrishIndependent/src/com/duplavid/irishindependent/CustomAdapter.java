@@ -20,6 +20,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
  
+/**
+ * @res activity_main
+ * @author Eva Hajdu
+ *
+ */
 public class CustomAdapter extends ArrayAdapter<String> {
 	private final Context context;
 

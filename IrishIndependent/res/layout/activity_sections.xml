@@ -5,17 +5,40 @@
    android:layout_height="wrap_content"
    android:id="@+id/info"
    >
+
+	<TableLayout
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent" >
+		<TableRow
+			android:id="@+id/tableRow2"
+			android:layout_height="fill_parent"  
+			android:layout_width="fill_parent"
+			android:onClick="getBackToMain"
+			android:background="#07676e" >
+	
+			<ImageView
+				android:id="@+id/imageView1"
+				android:layout_width="50dp"
+				android:layout_height="50dp"
+				android:paddingLeft="10dp"
+				android:src="@drawable/backward" />
+		
+			<TextView
+				android:id="@+id/headerrow"
+				android:layout_width="0dip"
+				android:layout_height="wrap_content"
+				android:layout_weight="7"
+				android:paddingLeft="10dp"
+				android:paddingTop="10dp"
+				android:text="@string/refreshList"
+				android:textAppearance="?android:attr/textAppearanceLarge"
+				android:textColor="#f3f3f3" />  
+		</TableRow>
+	</TableLayout>
    
 	<ListView
-	    android:id="@android:id/list"
-	    android:layout_width="fill_parent"
-	    android:layout_height="408dp" />
-
-	<Button
-	    android:id="@+id/button1"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:text="@string/okButton"
-	    android:onClick="saveList" />
+		android:id="@android:id/list"
+		android:layout_width="fill_parent"
+		android:layout_height="408dp" />
 
 </LinearLayout>

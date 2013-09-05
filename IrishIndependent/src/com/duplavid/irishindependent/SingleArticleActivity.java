@@ -23,7 +23,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 /**
@@ -32,6 +34,7 @@ import android.widget.TextView;
  * Creates three cache files with the groupPosition and childPosition.
  * Caches article, byline and picture source.
  * 
+ * @res single_article
  * @author Eva Hajdu
  *
  */
@@ -65,11 +68,13 @@ public class SingleArticleActivity extends Activity {
             SingleArticleActivity.groupPosition = i.getStringExtra("groupPosition");
             SingleArticleActivity.childPosition = i.getStringExtra("childPosition");
 
-            setTitle(title);
             TextView t = (TextView)findViewById(R.id.title);
     		t.setText(title);
     		t.setTypeface(MainActivity.Regular);
-    		t.setBackgroundColor(Color.parseColor(MainActivity.sections.get(Integer.parseInt(groupPosition)).getColor()));
+    		
+    		//Set the title row's color
+    		TableRow titlerow = (TableRow)findViewById(R.id.titlerow);
+    		titlerow.setBackgroundColor(Color.parseColor(MainActivity.sections.get(Integer.parseInt(groupPosition)).getColor()));
             
             //Set lead
             TextView l = (TextView)findViewById(R.id.lead);
@@ -133,6 +138,10 @@ public class SingleArticleActivity extends Activity {
 	    if(pd != null)
 	    	pd.dismiss();
 	    pd = null;
+	}
+	
+	public void getBackToMain(View v){
+		finish();
 	}
 	
 	public void createArticle(StringBuilder stringBuilder){

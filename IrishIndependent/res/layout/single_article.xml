@@ -10,17 +10,37 @@
 	    	android:layout_width="fill_parent"
 	    	android:layout_height="wrap_content" android:orientation="vertical">
 	    	
-	        <TextView
-		        android:id="@+id/title"
-		        android:layout_width="fill_parent"
-		        android:layout_height="fill_parent"
-		        android:text=""
-		        android:paddingLeft="10dp"
-				android:paddingRight="10dp"
-				android:paddingBottom="10dp"
-				android:paddingTop="10dp"
-				android:textColor="#ffffff"
-		        android:textAppearance="?android:attr/textAppearanceLarge" />
+		<TableLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content" >
+			<TableRow
+				android:id="@+id/titlerow"
+				android:layout_height="wrap_content"  
+				android:layout_width="wrap_content"
+				android:onClick="getBackToMain"
+				android:background="#07676e" >
+		
+				<ImageView
+					android:id="@+id/imageView1"
+					android:layout_width="30dp"
+					android:layout_height="50dp"
+					android:paddingLeft="10dp"
+					android:src="@drawable/backwards2" />
+			
+				<TextView
+			        android:id="@+id/title"
+			        android:layout_width="0dip"
+					android:layout_weight="5"
+			        android:layout_height="wrap_content"
+			        android:text=""
+			        android:paddingLeft="10dp"
+					android:paddingRight="10dp"
+					android:paddingBottom="10dp"
+					android:paddingTop="10dp"
+					android:textColor="#ffffff"
+			        android:textAppearance="?android:attr/textAppearanceLarge" />
+			</TableRow>
+		</TableLayout>
 	        
 	        <TextView
 		        android:id="@+id/byline"

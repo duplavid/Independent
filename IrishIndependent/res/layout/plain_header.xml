@@ -6,18 +6,26 @@ android:orientation="vertical"
 >
 	<TableLayout
 		android:layout_width="fill_parent"
-		android:layout_height="fill_parent" >
+		android:layout_height="wrap_content" >
 		<TableRow
-			android:id="@+id/tableRow2"
-			android:layout_height="fill_parent"  
-			android:layout_width="fill_parent"  
+			android:id="@+id/titlerow"
+			android:layout_height="wrap_content"  
+			android:layout_width="wrap_content" 
+			android:onClick="getBackToMain" 
 			android:layout_gravity="center_horizontal" >
 			
+		    <ImageView
+				android:id="@+id/imageView1"
+				android:layout_width="30dp"
+				android:layout_height="50dp"
+				android:paddingLeft="10dp"
+				android:src="@drawable/backwards2" />
+		    
 			<TextView
 				android:id="@+id/list_header_title"
 				android:layout_width="0dip"
 				android:layout_weight="5"
-				android:layout_height="50dp"
+				android:layout_height="wrap_content"
 				android:paddingTop="10dp"
 				android:paddingBottom="10dp"
 				android:paddingLeft="10dp"
