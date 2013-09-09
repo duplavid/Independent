@@ -13,14 +13,14 @@ android:orientation="vertical"
 			android:layout_width="wrap_content" 
 			android:onClick="getBackToMain" 
 			android:layout_gravity="center_horizontal" >
-			
-		    <ImageView
+		
+			<ImageView
 				android:id="@+id/imageView1"
 				android:layout_width="30dp"
 				android:layout_height="50dp"
 				android:paddingLeft="10dp"
 				android:src="@drawable/backwards2" />
-		    
+			  
 			<TextView
 				android:id="@+id/list_header_title"
 				android:layout_width="0dip"
@@ -30,9 +30,8 @@ android:orientation="vertical"
 				android:paddingBottom="10dp"
 				android:paddingLeft="10dp"
 				android:textAppearance="?android:attr/textAppearanceLarge"
-				android:textStyle="bold"
 				android:textColor="#ffffff" />
-	
+		
 		</TableRow>
 	</TableLayout>
 	

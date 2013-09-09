@@ -60,6 +60,40 @@ public class SetSectionsActivity extends ListActivity {
 		Section Beauty = new Section("Beauty", "Beauty", "#A64B00", "http://www.independent.ie/woman/beauty/rss", true);
 		Section Love = new Section("Love", "Love & Sex", "#BF7130", "http://www.independent.ie/woman/love-sex/rss", true);
 		Section Health = new Section("Health", "Diet & Fitness", "#FF6940", "http://www.independent.ie/woman/diet-fitness/rss", true);
+		Section Sport = new Section("Sport", "Sport", "#A64B00", "http://www.independent.ie/sport/rss", true);
+		Section Soccer = new Section("Soccer", "Soccer", "#A64B00", "http://www.independent.ie/sport/soccer/rss", true);
+		Section Gaelic = new Section("GaelicFootball", "Gaelic Football", "#A64B00", "http://www.independent.ie/sport/gaelic-football/rss", true);
+		Section Hurling = new Section("Hurling", "Hurling", "#A64B00", "http://www.independent.ie/sport/hurling/rss", true);
+		Section Rugby = new Section("Rugby", "Rugby", "#A64B00", "http://www.independent.ie/sport/rugby/rss", true);
+		Section Golf = new Section("Golf", "Golf", "#A64B00", "http://www.independent.ie/sport/golf/rss", true);
+		Section Horse = new Section("Horse", "Horse Racing", "#A64B00", "http://www.independent.ie/sport/horse-racing/rss", true);
+		Section Other = new Section("OtherSports", "Other Sports", "#A64B00", "http://www.independent.ie/sport/other-sports/rss", true);
+		Section Cycling = new Section("Cycling", "Cycling", "#A64B00", "http://www.independent.ie/sport/other-sports/cycling/rss", true);
+		Section Business = new Section("Business", "Business", "#A64B00", "http://www.independent.ie/business/rss", true);
+		Section IrishBusiness = new Section("IrishBusiness", "Irish Business News", "#A64B00", "http://www.independent.ie/business/irish/rss", true);
+		Section WorldBusiness = new Section("WorldBusiness", "World Business News", "#A64B00", "http://www.independent.ie/business/world/rss", true);
+		Section Technology = new Section("Technology", "Technology", "#A64B00", "http://www.independent.ie/business/technology/rss", true);
+		Section Farming = new Section("Farming", "Farming", "#A64B00", "http://www.independent.ie/business/farming/rss", true);
+		Section SmallBusiness = new Section("SmallBusiness", "Small Business", "#A64B00", "http://www.independent.ie/business/small-business/rss", true);
+		Section Media = new Section("Media", "Media", "#A64B00", "http://www.independent.ie/business/media/rss", true);
+		Section PersonalFinance = new Section("PersonalFinance", "Personal Finance", "#A64B00", "http://www.independent.ie/business/personal-finance/rss", true);
+		Section CommercialProperty = new Section("CommercialProperty", "Commercial Property", "#A64B00", "http://www.independent.ie/business/commercial-property/rss", true);
+		Section Entertainment = new Section("Entertainment", "Entertainment", "#A64B00", "http://www.independent.ie/entertainment/rss", true);
+		Section Movies = new Section("Movies", "Movies", "#A64B00", "http://www.independent.ie/entertainment/movies/rss", true);
+		Section Music = new Section("Music", "Music", "#A64B00", "http://www.independent.ie/entertainment/music/rss", true);
+		Section TVRadio = new Section("TVRadio", "TV-Radio", "#A64B00", "http://www.independent.ie/entertainment/tv-radio/rss", true);
+		Section Festivals = new Section("Festivals", "Festivals", "#A64B00", "http://www.independent.ie/entertainment/festivals/rss", true);
+		Section Bookarts = new Section("Bookarts", "Book-Arts", "#A64B00", "http://www.independent.ie/entertainment/books-arts/rss", true);
+		Section Competitions = new Section("Competitions", "Competitions", "#A64B00", "http://competitions.independent.ie/rss", true);
+		Section Lifestyle = new Section("Lifestyle", "Lifestyle", "#A64B00", "http://www.independent.ie/lifestyle/rss", true);
+		Section HealthLifestyle = new Section("LifestyleHealth", "Lifestyle - Health", "#A64B00", "http://www.independent.ie/lifestyle/health/rss", true);
+		Section MothersBabies = new Section("MothersBabies", "Mothers-Babies", "#A64B00", "http://www.independent.ie/lifestyle/mothers-babies/rss", true);
+		Section Education = new Section("Education", "Education", "#A64B00", "http://www.independent.ie/lifestyle/education/rss", true);
+		Section Food = new Section("Food", "Food-Drink", "#A64B00", "http://www.independent.ie/lifestyle/food-drink/rss", true);
+		Section Home = new Section("Home", "Home", "#A64B00", "http://www.independent.ie/lifestyle/property-homes/rss", true);
+		Section Motoring = new Section("Motoring", "Motoring", "#A64B00", "http://www.independent.ie/lifestyle/motoring/rss", true);
+		Section Travel = new Section("Travel", "Travel", "#A64B00", "http://www.independent.ie/lifestyle/travel/rss", true);
+		Section Trending = new Section("Trending", "Trending", "#A64B00", "http://www.independent.ie/lifestyle/ThreeTrending/rss", true);
 		
 		db.addSection(BreakingNews);
 		db.addSection(WorldNews);
@@ -70,6 +104,42 @@ public class SetSectionsActivity extends ListActivity {
 		db.addSection(Beauty);
 		db.addSection(Love);
 		db.addSection(Health);
+		
+		db.addSection(Sport);
+		db.addSection(Soccer);
+		db.addSection(Gaelic);
+		db.addSection(Hurling);
+		db.addSection(Rugby);
+		db.addSection(Golf);
+		db.addSection(Horse);
+		db.addSection(Other);
+		db.addSection(Cycling);
+		db.addSection(Business);
+		db.addSection(IrishBusiness);
+		db.addSection(WorldBusiness);
+		db.addSection(Technology);
+		db.addSection(Farming);
+		db.addSection(SmallBusiness);
+		db.addSection(Media);
+		db.addSection(PersonalFinance);
+		db.addSection(CommercialProperty);
+		db.addSection(Entertainment);
+		db.addSection(Movies);
+		db.addSection(Music);
+		db.addSection(TVRadio);
+		db.addSection(Festivals);
+		db.addSection(Bookarts);
+		db.addSection(Competitions);
+		db.addSection(Lifestyle);
+		db.addSection(HealthLifestyle);
+		db.addSection(MothersBabies);
+		db.addSection(Education);
+		db.addSection(Food);
+		db.addSection(Home);
+		db.addSection(Motoring);
+		db.addSection(Travel);
+		db.addSection(Trending);		
+		
 	}
 	
 	public void getBackToMain(View v){
@@ -78,6 +148,17 @@ public class SetSectionsActivity extends ListActivity {
         
         finish();
 	}
+	
+	@Override
+    public void onBackPressed() {
+        //start activity here
+        super.onBackPressed();   
+        Intent main = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(main);
+        
+        finish();
+
+    }
 	
 	
 }

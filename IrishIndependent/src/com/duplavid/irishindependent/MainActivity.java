@@ -11,6 +11,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.util.LruCache;
@@ -19,8 +21,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ExpandableListView;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -35,6 +39,7 @@ import android.graphics.Typeface;
  *
  */
 public class MainActivity extends Activity {
+	
 	ArrayList<String> links;
 	String [] urls;
 	public final static String ITEM_TITLE = "title";
@@ -43,26 +48,27 @@ public class MainActivity extends Activity {
 	public static ArrayList<Section> sections;
 	
 	ExpandableListAdapter listAdapter;
-    ExpandableListView expListView;
-    
+	ExpandableListView expListView;
+	
 	public ProgressDialog pd;
+	private static String pdText;
 	
 	final static int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-    final static int cacheSize = maxMemory / 8;
-    
-    public static Typeface Regular;
-    public static Typeface Bold;
-    public static Typeface Italic;
-    
-    public static Context thiscontext;
-    
-    private static LruCache<String, Bitmap> mMemoryCache = new LruCache<String, Bitmap>(1024 * 1024 * 2) {
+	final static int cacheSize = maxMemory / 8;
+	
+	public static Typeface Regular;
+	public static Typeface Bold;
+	public static Typeface Italic;
+	
+	public static Context thiscontext;
+
+	private static LruCache<String, Bitmap> mMemoryCache = new LruCache<String, Bitmap>(1024 * 1024 * 2) {
 		@Override
 		public int sizeOf(String key, Bitmap value) {
 			return value.getRowBytes() * value.getHeight();
 		}
 	};
-	
+
 	public Map<String,?> createItem(String title, String caption) {
 		Map<String, String> item = new HashMap<String, String>();
 		item.put(ITEM_TITLE, title);
@@ -77,51 +83,73 @@ public class MainActivity extends Activity {
 		thiscontext = this;
 		expListView = (ExpandableListView) findViewById(R.id.lvExp);
 		
-		pd = new ProgressDialog(this.getApplicationContext());
-		db = new DatabaseHandler(this);
-
-		//Set typefaces
-		Regular = Typeface.createFromAsset(this.getAssets(),"fonts/DroidSerif-Regular.ttf");
-		Bold = Typeface.createFromAsset(this.getAssets(),"fonts/DroidSerif-Bold.ttf");
-		Italic = Typeface.createFromAsset(this.getAssets(),"fonts/DroidSerif-Italic.ttf");
+		if(isNetworkAvailable() == true){
+			pd = new ProgressDialog(this.getApplicationContext());
+			db = new DatabaseHandler(this);
+	
+			//Set typefaces
+			Regular = Typeface.createFromAsset(this.getAssets(),"fonts/DroidSerif-Regular.ttf");
+			Bold = Typeface.createFromAsset(this.getAssets(),"fonts/DroidSerif-Bold.ttf");
+			Italic = Typeface.createFromAsset(this.getAssets(),"fonts/DroidSerif-Italic.ttf");
 		
-		getRSS();
+			getRSS();
+		}else{
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage("Your mobile isn't connected to the internet. Please check your connection and try again.")
+			.setTitle("No connection");
+
+			builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					finish();
+				}
+			});
+			AlertDialog dialog = builder.create();
+			dialog.show();
+		}
 		
 	}
-	
+
+	//Check for network
+	private boolean isNetworkAvailable() {
+		ConnectivityManager connectivityManager 
+			= (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+		return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+	}
+
 	@Override
 	public void onResume(){
 		super.onResume();
 		//getRSS();
 	}
-	
+
 	@Override
 	public void onPause() {
-	    super.onPause();
-
-	    if(pd != null){
-	    	pd.dismiss();
-	    }	
-	    pd = null;
-	}
+		super.onPause();
 	
+		if(pd != null){
+			pd.dismiss();
+		}	
+		pd = null;
+	}
+
 	public void setSections(){
 		sections = new ArrayList<Section>();
 		sections = db.getEnabledSections();
-		
+			
 		//TODO: elso bejelentkezes!
-		
 		if(sections.size() == 0){
 			SetSectionsActivity.populateDatabase();
 			sections = db.getEnabledSections();
-			//Intent intent = new Intent(this, SetSectionsActivity.class);
-			//startActivity(intent);
+			pdText = "First time setup - you can set the sections you want to see in the Settings later.";
+		}else{
+			pdText = "Loading sections list...";
 		}
-		
+			
 		int size = sections.size();
 		urls = new String[size];
 		int i = 0;
-
+		
 		for(Section sec : sections){
 			urls[i] = sec.getUrl();
 			i++;
@@ -130,7 +158,6 @@ public class MainActivity extends Activity {
 
 	public void getRSS() {
 		setSections();
-		
 		//Delete the cache every time we refresh the RSS
 		clearApplicationData();
 		pd = new ProgressDialog(this);
@@ -146,17 +173,18 @@ public class MainActivity extends Activity {
 	 *
 	 */
 	private class DownloadWebPageTask extends AsyncTask<String, Void, String> {
-		private ArrayList<Section> objects;
 		
+		private ArrayList<Section> objects;
+	
 		@Override
 		protected void onPreExecute() {
 			pd.setTitle("Loading...");
-			pd.setMessage("Please wait.");
+			pd.setMessage(pdText);
 			pd.setCancelable(true);
 			pd.setIndeterminate(true);
 			pd.show();
 		}
-		
+
 		public DownloadWebPageTask(ArrayList<Section> sections){
 			this.objects = sections;
 		}
@@ -165,7 +193,7 @@ public class MainActivity extends Activity {
 		protected String doInBackground(String... urls) {
 			String response = "";
 			int j = 0;
-			
+				
 			for (String url : urls) {
 				DefaultHttpClient client = new DefaultHttpClient();
 				HttpGet httpGet = new HttpGet(url);
@@ -173,7 +201,7 @@ public class MainActivity extends Activity {
 					HttpResponse execute = client.execute(httpGet);
 					InputStream content = execute.getEntity().getContent();
 					List<Entry> list = MainParser.parse(content);
-
+		
 					for(int i=0;i<list.size();i++){
 						Section o = this.objects.get(j);
 						o.descriptions.add(list.get(i).getDescription());
@@ -192,12 +220,12 @@ public class MainActivity extends Activity {
 		@Override
 		protected void onPostExecute(String result) {
 			if (pd != null) { 
-		        pd.dismiss();
-		    }
+				pd.dismiss();
+			}
 			showList();
 		}
 	}
-	
+
 	/**
 	 * Connects to ExpandableListAdapter
 	 * Shows all available sections and their first 5 things.
@@ -207,56 +235,54 @@ public class MainActivity extends Activity {
 	public void showList(){
 		ArrayList<String> listDataHeader = new ArrayList<String>();
 		HashMap<String, List<String>> listDataChild = new HashMap<String, List<String>>();
- 
-        // Adding child data
+	 
+		// Adding child data
 		for(int i=0;i<MainActivity.sections.size();i++){
-			listDataHeader.add(MainActivity.sections.get(i).getFullName());
-			
+			listDataHeader.add(MainActivity.sections.get(i).getFullName());	
 			List<String> links = new ArrayList<String>();
 			for(int j=0;j<MainActivity.sections.get(i).getFirst5Links().size();j++){
 				links.add(MainActivity.sections.get(i).getFirst5Links().get(j));
 			}			
-			
 			listDataChild.put(listDataHeader.get(i), links);
 		}
-
+	
 		listAdapter = new ExpandableListAdapter(this, listDataHeader, listDataChild);
-        expListView.setAdapter(listAdapter);
+		expListView.setAdapter(listAdapter);
 		
 	}
-	
+
 	/**
 	 * Set up menu
 	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.main, menu);
-	    return true;
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main, menu);
+		return true;
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle item selection
-	    switch (item.getItemId()) {
-	    case R.id.action_refresh:
-	    	getRSS();
-	        return true;
-	    case R.id.action_settings:
-	    	settings();
-	        return true;
-	    default:
-	        return super.onOptionsItemSelected(item);
-	    }
+		// Handle item selection
+		switch (item.getItemId()) {
+			case R.id.action_refresh:
+				getRSS();
+				return true;
+			case R.id.action_settings:
+				settings();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
 	}
-	
+
 	/**
 	 * Menumethod Refresh
 	 */
 	public void refresh(){
 		getRSS();
 	}
-	
+
 	/**
 	 * Menumethod Settings
 	 */
@@ -264,18 +290,18 @@ public class MainActivity extends Activity {
 		Intent intent = new Intent(this.getApplicationContext(), SetSectionsActivity.class);
 		startActivity(intent);
 	}
-	
+
 	//Caching images
 	public static void addBitmapToMemoryCache(String key, Bitmap bitmap) {
-	    if (getBitmapFromMemCache(key) == null) {
-	        mMemoryCache.put(key, bitmap);
-	    }
+		if (getBitmapFromMemCache(key) == null) {
+			mMemoryCache.put(key, bitmap);
+		}
 	}
 
 	public static Bitmap getBitmapFromMemCache(String key) {
-	    return mMemoryCache.get(key);
+		return mMemoryCache.get(key);
 	}
-	
+
 	//Delete file cache
 	public void clearApplicationData() {
 		File cache = getCacheDir();

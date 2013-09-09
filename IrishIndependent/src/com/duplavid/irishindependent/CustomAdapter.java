@@ -21,7 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
  
 /**
- * @res activity_main
+ * @res activity_main, list_articlelist
  * @author Eva Hajdu
  *
  */
@@ -75,9 +75,7 @@ public class CustomAdapter extends ArrayAdapter<String> {
 		    final Bitmap bitmap = MainActivity.getBitmapFromMemCache(String.valueOf(sectionid)+"_"+imageKey);
 		    if (bitmap != null) {
 		    	pics.setImageBitmap(bitmap);
-		    	pics.getLayoutParams().height = 150;
-		    	pics.getLayoutParams().width = 150;
-		    	pics.setPadding(15,7,0,20);
+		    	setPicRow(pics);
 		    } else {
 		    	RetreivePictureTask task = new RetreivePictureTask(pictures.get(position), pics, position, Integer.parseInt(sectionid));
 				task.execute(new String[] { pictures.get(position) });
@@ -109,6 +107,12 @@ public class CustomAdapter extends ArrayAdapter<String> {
 		return rowView;
 	}
 	
+    public void setPicRow(ImageView v){
+    	v.setBackgroundResource(R.drawable.stroke_01);
+    	v.getLayoutParams().height = 150;
+    	v.getLayoutParams().width = 150;
+    }
+	
 	class RetreivePictureTask extends AsyncTask<String, Void, Drawable> {
 	    private ImageView pics;
 	    private Integer position;
@@ -133,9 +137,7 @@ public class CustomAdapter extends ArrayAdapter<String> {
 
 	    protected void onPostExecute(Drawable result) {
 	    	pics.setImageDrawable(result);
-	    	pics.getLayoutParams().height = 150;
-	    	pics.getLayoutParams().width = 150;
-	    	pics.setPadding(15,7,0,20);
+	    	setPicRow(pics);
 	    	Bitmap bitmap = ((BitmapDrawable) result).getBitmap();
 	    	MainActivity.addBitmapToMemoryCache(groupPosition.toString()+'_'+position.toString(), bitmap);    	
 	    }

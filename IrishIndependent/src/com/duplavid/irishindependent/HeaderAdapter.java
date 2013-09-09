@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 /**
  * 
- * @res list_header
+ * @res list_header, plain_header
  * @author Eva Hajdu
  *
  */
@@ -45,7 +45,7 @@ public class HeaderAdapter extends ArrayAdapter<String>{
 		TableRow titlerow = (TableRow) rowView.findViewById(R.id.titlerow);
 		titlerow.setBackgroundColor(Color.parseColor(MainActivity.sections.get(Integer.parseInt(sectionid)).getColor()));
 		header.setText(this.items.get(position));
-		header.setTypeface(MainActivity.Regular);
+		//header.setTypeface(MainActivity.Regular);
 		
 		return rowView;
 	}

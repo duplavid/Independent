@@ -19,8 +19,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
  
 /**
@@ -85,9 +88,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 		    Bitmap bitmap = MainActivity.getBitmapFromMemCache(groupKey+'_'+posKey);
 		    if (bitmap != null) {
 		    	pics.setImageBitmap(bitmap);
-		    	pics.getLayoutParams().height = 150;
-		    	pics.getLayoutParams().width = 150;
-		    	pics.setPadding(15,7,0,20);
+		    	setPicRow(pics);
 		    	bitmap = null;
 		    } else {
 		    	RetreivePictureTask task = new RetreivePictureTask(pictures.get(childPosition), pics, childPosition, groupPosition);
@@ -97,8 +98,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 		
 		title.setTypeface(MainActivity.Regular);
 		title.setText(titles.get(childPosition));
+		//TextViewJustify.justifyText(((TextView)rowView.findViewById(R.id.titleRow)), 170f); 
 		
 		description.setText(descriptions.get(childPosition));
+		//TextViewJustify.justifyText(((TextView)rowView.findViewById(R.id.descriptionRow)), 150f); 
 		
 		rowView.setOnClickListener(new OnClickListener() {
 			@Override
@@ -118,6 +121,12 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 		});
 		
 		return rowView;
+    }
+    
+    public void setPicRow(ImageView v){
+    	v.setBackgroundResource(R.drawable.stroke_01);
+    	v.getLayoutParams().height = 150;
+    	v.getLayoutParams().width = 150;
     }
  
     @Override
@@ -161,8 +170,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 		
 		header.setBackgroundColor(Color.parseColor(MainActivity.sections.get(groupPosition).getColor()));
 		header.setText(MainActivity.sections.get(groupPosition).getFullName());
-		
-		header.setTypeface(MainActivity.Regular);
+		//header.setTypeface(MainActivity.Regular);
 		
 		img.setOnClickListener(new OnClickListener() {
 			@Override
@@ -212,9 +220,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
 	    protected void onPostExecute(Drawable result) {
 	    	pics.setImageDrawable(result);
-	    	pics.getLayoutParams().height = 150;
-	    	pics.getLayoutParams().width = 150;
-	    	pics.setPadding(15,7,0,20);
+	    	setPicRow(pics);
 	    	Bitmap bitmap = ((BitmapDrawable) result).getBitmap();
 	    	MainActivity.addBitmapToMemoryCache(groupPosition.toString()+'_'+position.toString(), bitmap);
 	    	bitmap = null;

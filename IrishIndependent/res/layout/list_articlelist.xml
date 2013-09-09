@@ -23,10 +23,14 @@
 	            android:id="@+id/tableRow2"
 	        	android:layout_height="fill_parent"  
 	        	android:layout_width="fill_parent" >
+	        	
 		        <ImageView
 		            android:id="@+id/pictureRow"
 		            android:paddingTop="5dp"
 		            android:paddingBottom="10dp"
+		            android:paddingLeft="10dp"
+		            android:layout_marginLeft="10dp"
+		            android:layout_marginBottom="10dp"
 		            android:contentDescription="@string/rowImage" />
 		        <TextView
 		            android:id="@+id/descriptionRow"
@@ -37,6 +41,7 @@
 					android:textAppearance="?android:attr/textAppearanceSmall"
 		            />
 	        </TableRow>
+
         </TableLayout>
 
 </LinearLayout>

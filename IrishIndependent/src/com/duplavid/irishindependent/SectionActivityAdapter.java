@@ -53,10 +53,8 @@ public class SectionActivityAdapter extends ArrayAdapter<String> {
                 // TODO Auto-generated method stub
                 if(checkBox.isChecked()){
                 	MainActivity.db.updateState((position+1), true);
-                    System.out.println((position+1)+" Checked");
                 }else{
                 	MainActivity.db.updateState((position+1), false);
-                    System.out.println((position+1)+" Un-Checked");
                 }
             }
         });
