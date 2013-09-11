@@ -35,7 +35,7 @@
                 android:paddingLeft="10dp"
                 android:paddingTop="10dp"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="#ffffff" />
+                android:textColor="#f3f3f3" />
 
             <ImageView
                 android:id="@+id/list_header_image"

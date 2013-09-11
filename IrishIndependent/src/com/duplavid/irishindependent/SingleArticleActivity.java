@@ -68,14 +68,21 @@ public class SingleArticleActivity extends Activity {
             SingleArticleActivity.groupPosition = i.getStringExtra("groupPosition");
             SingleArticleActivity.childPosition = i.getStringExtra("childPosition");
 
+            //Set above title
             TextView t = (TextView)findViewById(R.id.title);
     		t.setText(title);
     		t.setTypeface(MainActivity.Regular);
-    		
-    		//Set the title row's color
     		TableRow titlerow = (TableRow)findViewById(R.id.titlerow);
     		titlerow.setBackgroundColor(Color.parseColor(MainActivity.sections.get(Integer.parseInt(groupPosition)).getColor()));
             
+    		//Set the down row
+    		TextView t2 = (TextView)findViewById(R.id.titleDown);
+     		t2.setText(title);
+     		t2.setTypeface(MainActivity.Regular);
+     		TableRow titlerow2 = (TableRow)findViewById(R.id.titledownrow);
+     		titlerow2.setBackgroundColor(Color.parseColor(MainActivity.sections.get(Integer.parseInt(groupPosition)).getColor()));
+             
+    		
             //Set lead
             TextView l = (TextView)findViewById(R.id.lead);
     		l.setText(lead);

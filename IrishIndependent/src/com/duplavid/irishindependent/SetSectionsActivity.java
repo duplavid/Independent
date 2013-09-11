@@ -41,9 +41,6 @@ public class SetSectionsActivity extends ListActivity {
 		}catch(NullPointerException e){
         	finish();
 		}
-		//TODO: megcsinalni a konkret listat
-		//TODO: lista akkor, ha nincs az adatbazisban semmi
-		//TODO: lista akkor, ha mar van az adatbazisban
 		
 	}
 	
@@ -51,49 +48,54 @@ public class SetSectionsActivity extends ListActivity {
 		db = MainActivity.db;
 		sectionlist = new ArrayList<Section>();
 		
-		Section BreakingNews = new Section("BreakingNews", "Breaking News", "#009999", "http://www.independent.ie/breaking-news/rss", true);
+		Section BreakingNews = new Section("BreakingNews", "Breaking News", "#006363", "http://www.independent.ie/breaking-news/rss", true);
 		Section WorldNews = new Section("WorldNews", "World News", "#1D7373", "http://www.independent.ie/world-news/rss", true);
-		Section IrishNews = new Section("IrishNews", "Irish News", "#006363", "http://www.independent.ie/irish-news/rss", true);
-		Section Woman = new Section("Woman", "Woman", "#1240AB", "http://www.independent.ie/woman/rss", true);
-		Section CelebNews = new Section("CelebNews", "Celeb News", "#06266F", "http://www.independent.ie/woman/celeb-news/rss", true);
-		Section Fashion = new Section("Fashion", "Fashion", "#FF7400", "http://www.independent.ie/woman/fashion/rss", true);
-		Section Beauty = new Section("Beauty", "Beauty", "#A64B00", "http://www.independent.ie/woman/beauty/rss", true);
-		Section Love = new Section("Love", "Love & Sex", "#BF7130", "http://www.independent.ie/woman/love-sex/rss", true);
-		Section Health = new Section("Health", "Diet & Fitness", "#FF6940", "http://www.independent.ie/woman/diet-fitness/rss", true);
-		Section Sport = new Section("Sport", "Sport", "#A64B00", "http://www.independent.ie/sport/rss", true);
-		Section Soccer = new Section("Soccer", "Soccer", "#A64B00", "http://www.independent.ie/sport/soccer/rss", true);
-		Section Gaelic = new Section("GaelicFootball", "Gaelic Football", "#A64B00", "http://www.independent.ie/sport/gaelic-football/rss", true);
-		Section Hurling = new Section("Hurling", "Hurling", "#A64B00", "http://www.independent.ie/sport/hurling/rss", true);
-		Section Rugby = new Section("Rugby", "Rugby", "#A64B00", "http://www.independent.ie/sport/rugby/rss", true);
-		Section Golf = new Section("Golf", "Golf", "#A64B00", "http://www.independent.ie/sport/golf/rss", true);
-		Section Horse = new Section("Horse", "Horse Racing", "#A64B00", "http://www.independent.ie/sport/horse-racing/rss", true);
-		Section Other = new Section("OtherSports", "Other Sports", "#A64B00", "http://www.independent.ie/sport/other-sports/rss", true);
-		Section Cycling = new Section("Cycling", "Cycling", "#A64B00", "http://www.independent.ie/sport/other-sports/cycling/rss", true);
-		Section Business = new Section("Business", "Business", "#A64B00", "http://www.independent.ie/business/rss", true);
-		Section IrishBusiness = new Section("IrishBusiness", "Irish Business News", "#A64B00", "http://www.independent.ie/business/irish/rss", true);
-		Section WorldBusiness = new Section("WorldBusiness", "World Business News", "#A64B00", "http://www.independent.ie/business/world/rss", true);
-		Section Technology = new Section("Technology", "Technology", "#A64B00", "http://www.independent.ie/business/technology/rss", true);
-		Section Farming = new Section("Farming", "Farming", "#A64B00", "http://www.independent.ie/business/farming/rss", true);
-		Section SmallBusiness = new Section("SmallBusiness", "Small Business", "#A64B00", "http://www.independent.ie/business/small-business/rss", true);
-		Section Media = new Section("Media", "Media", "#A64B00", "http://www.independent.ie/business/media/rss", true);
-		Section PersonalFinance = new Section("PersonalFinance", "Personal Finance", "#A64B00", "http://www.independent.ie/business/personal-finance/rss", true);
-		Section CommercialProperty = new Section("CommercialProperty", "Commercial Property", "#A64B00", "http://www.independent.ie/business/commercial-property/rss", true);
-		Section Entertainment = new Section("Entertainment", "Entertainment", "#A64B00", "http://www.independent.ie/entertainment/rss", true);
-		Section Movies = new Section("Movies", "Movies", "#A64B00", "http://www.independent.ie/entertainment/movies/rss", true);
-		Section Music = new Section("Music", "Music", "#A64B00", "http://www.independent.ie/entertainment/music/rss", true);
-		Section TVRadio = new Section("TVRadio", "TV-Radio", "#A64B00", "http://www.independent.ie/entertainment/tv-radio/rss", true);
-		Section Festivals = new Section("Festivals", "Festivals", "#A64B00", "http://www.independent.ie/entertainment/festivals/rss", true);
-		Section Bookarts = new Section("Bookarts", "Book-Arts", "#A64B00", "http://www.independent.ie/entertainment/books-arts/rss", true);
-		Section Competitions = new Section("Competitions", "Competitions", "#A64B00", "http://competitions.independent.ie/rss", true);
-		Section Lifestyle = new Section("Lifestyle", "Lifestyle", "#A64B00", "http://www.independent.ie/lifestyle/rss", true);
-		Section HealthLifestyle = new Section("LifestyleHealth", "Lifestyle - Health", "#A64B00", "http://www.independent.ie/lifestyle/health/rss", true);
-		Section MothersBabies = new Section("MothersBabies", "Mothers-Babies", "#A64B00", "http://www.independent.ie/lifestyle/mothers-babies/rss", true);
-		Section Education = new Section("Education", "Education", "#A64B00", "http://www.independent.ie/lifestyle/education/rss", true);
-		Section Food = new Section("Food", "Food-Drink", "#A64B00", "http://www.independent.ie/lifestyle/food-drink/rss", true);
-		Section Home = new Section("Home", "Home", "#A64B00", "http://www.independent.ie/lifestyle/property-homes/rss", true);
-		Section Motoring = new Section("Motoring", "Motoring", "#A64B00", "http://www.independent.ie/lifestyle/motoring/rss", true);
-		Section Travel = new Section("Travel", "Travel", "#A64B00", "http://www.independent.ie/lifestyle/travel/rss", true);
-		Section Trending = new Section("Trending", "Trending", "#A64B00", "http://www.independent.ie/lifestyle/ThreeTrending/rss", true);
+		Section IrishNews = new Section("IrishNews", "Irish News", "#009999", "http://www.independent.ie/irish-news/rss", true);
+		
+		Section Woman = new Section("Woman", "Woman", "#7109aa", "http://www.independent.ie/woman/rss", true);
+		Section CelebNews = new Section("CelebNews", "Celeb News", "#7e1cb4", "http://www.independent.ie/woman/celeb-news/rss", true);
+		Section Fashion = new Section("Fashion", "Fashion", "#8c21c6", "http://www.independent.ie/woman/fashion/rss", true);
+		Section Beauty = new Section("Beauty", "Beauty", "#a33bdc", "http://www.independent.ie/woman/beauty/rss", true);
+		Section Love = new Section("Love", "Love & Sex", "#af46e8", "http://www.independent.ie/woman/love-sex/rss", true);
+		Section Health = new Section("Health", "Diet & Fitness", "#b846f6", "http://www.independent.ie/woman/diet-fitness/rss", true);
+		
+		Section Sport = new Section("Sport", "Sport", "#0f701d", "http://www.independent.ie/sport/rss", true);
+		Section Soccer = new Section("Soccer", "Soccer", "#0f7d1e", "http://www.independent.ie/sport/soccer/rss", true);
+		Section Gaelic = new Section("GaelicFootball", "Gaelic Football", "#108921", "http://www.independent.ie/sport/gaelic-football/rss", true);
+		Section Hurling = new Section("Hurling", "Hurling", "#0f9421", "http://www.independent.ie/sport/hurling/rss", true);
+		Section Rugby = new Section("Rugby", "Rugby", "#1d9e2f", "http://www.independent.ie/sport/rugby/rss", true);
+		Section Golf = new Section("Golf", "Golf", "#2da43e", "http://www.independent.ie/sport/golf/rss", true);
+		Section Horse = new Section("Horse", "Horse Racing", "#43ab52", "http://www.independent.ie/sport/horse-racing/rss", true);
+		Section Other = new Section("OtherSports", "Other Sports", "#50b75e", "http://www.independent.ie/sport/other-sports/rss", true);
+		Section Cycling = new Section("Cycling", "Cycling", "#5fbe6d", "http://www.independent.ie/sport/other-sports/cycling/rss", true);
+		
+		Section Business = new Section("Business", "Business", "#1240ab", "http://www.independent.ie/business/rss", true);
+		Section IrishBusiness = new Section("IrishBusiness", "Irish Business News", "#224caf", "http://www.independent.ie/business/irish/rss", true);
+		Section WorldBusiness = new Section("WorldBusiness", "World Business News", "#325bb9", "http://www.independent.ie/business/world/rss", true);
+		Section Technology = new Section("Technology", "Technology", "#406aca", "http://www.independent.ie/business/technology/rss", true);
+		Section Farming = new Section("Farming", "Farming", "#4872d3", "http://www.independent.ie/business/farming/rss", true);
+		Section SmallBusiness = new Section("SmallBusiness", "Small Business", "#4f7add", "http://www.independent.ie/business/small-business/rss", true);
+		Section Media = new Section("Media", "Media", "#527fea", "http://www.independent.ie/business/media/rss", true);
+		Section PersonalFinance = new Section("PersonalFinance", "Personal Finance", "#5a88f2", "http://www.independent.ie/business/personal-finance/rss", true);
+		Section CommercialProperty = new Section("CommercialProperty", "Commercial Property", "#6f98f7", "http://www.independent.ie/business/commercial-property/rss", true);
+		
+		Section Entertainment = new Section("Entertainment", "Entertainment", "#834b14", "http://www.independent.ie/entertainment/rss", true);
+		Section Movies = new Section("Movies", "Movies", "#925418", "http://www.independent.ie/entertainment/movies/rss", true);
+		Section Music = new Section("Music", "Music", "#a5601c", "http://www.independent.ie/entertainment/music/rss", true);
+		Section TVRadio = new Section("TVRadio", "TV-Radio", "#b56a20", "http://www.independent.ie/entertainment/tv-radio/rss", true);
+		Section Festivals = new Section("Festivals", "Festivals", "#bd6e21", "http://www.independent.ie/entertainment/festivals/rss", true);
+		Section Bookarts = new Section("Bookarts", "Book-Arts", "#ce7824", "http://www.independent.ie/entertainment/books-arts/rss", true);
+		Section Competitions = new Section("Competitions", "Competitions", "#d77d25", "http://competitions.independent.ie/rss", true);
+		
+		Section Lifestyle = new Section("Lifestyle", "Lifestyle", "#9e194d", "http://www.independent.ie/lifestyle/rss", true);
+		Section HealthLifestyle = new Section("LifestyleHealth", "Lifestyle - Health", "#ae1852", "http://www.independent.ie/lifestyle/health/rss", true);
+		Section MothersBabies = new Section("MothersBabies", "Mothers-Babies", "#bf215e", "http://www.independent.ie/lifestyle/mothers-babies/rss", true);
+		Section Education = new Section("Education", "Education", "#d02969", "http://www.independent.ie/lifestyle/education/rss", true);
+		Section Food = new Section("Food", "Food-Drink", "#dd286e", "http://www.independent.ie/lifestyle/food-drink/rss", true);
+		Section Home = new Section("Home", "Home", "#e83a7d", "http://www.independent.ie/lifestyle/property-homes/rss", true);
+		Section Motoring = new Section("Motoring", "Motoring", "#f14b8b", "http://www.independent.ie/lifestyle/motoring/rss", true);
+		Section Travel = new Section("Travel", "Travel", "#f45693", "http://www.independent.ie/lifestyle/travel/rss", true);
+		Section Trending = new Section("Trending", "Trending", "#fc69a2", "http://www.independent.ie/lifestyle/ThreeTrending/rss", true);
 		
 		db.addSection(BreakingNews);
 		db.addSection(WorldNews);

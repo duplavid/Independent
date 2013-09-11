@@ -32,8 +32,8 @@ public final class R {
         public static final int waitforpic=0x7f020008;
     }
     public static final class id {
-        public static final int action_refresh=0x7f080012;
-        public static final int action_settings=0x7f080013;
+        public static final int action_refresh=0x7f080015;
+        public static final int action_settings=0x7f080016;
         public static final int article=0x7f080011;
         public static final int articleimage=0x7f080010;
         public static final int byline=0x7f08000e;
@@ -41,6 +41,7 @@ public final class R {
         public static final int descriptionRow=0x7f080007;
         public static final int headerrow=0x7f080003;
         public static final int imageView1=0x7f080002;
+        public static final int imageViewDown=0x7f080013;
         public static final int info=0x7f080000;
         public static final int lead=0x7f08000f;
         public static final int list_header_empty=0x7f080008;
@@ -50,7 +51,9 @@ public final class R {
         public static final int pictureRow=0x7f080006;
         public static final int tableRow2=0x7f080001;
         public static final int title=0x7f08000d;
+        public static final int titleDown=0x7f080014;
         public static final int titleRow=0x7f080005;
+        public static final int titledownrow=0x7f080012;
         public static final int titlerow=0x7f08000c;
     }
     public static final class layout {
