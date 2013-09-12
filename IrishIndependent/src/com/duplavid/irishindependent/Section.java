@@ -1,5 +1,6 @@
 package com.duplavid.irishindependent;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
@@ -12,7 +13,7 @@ import java.util.ArrayList;
  * @author Eva Hajdu
  *
  */
-public class Section{
+public class Section implements Serializable{
 	public ArrayList<String> descriptions;
 	public ArrayList<String> links;
 	public ArrayList<String> titles;

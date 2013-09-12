@@ -11,6 +11,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,17 +72,18 @@ public class CustomAdapter extends ArrayAdapter<String> {
 		TextView description = (TextView) rowView.findViewById(R.id.descriptionRow);
 		ImageView pics = (ImageView) rowView.findViewById(R.id.pictureRow);
 		
-		if(pictures.get(position) != null){
+		if(pictures.get(position) != null && isNetworkAvailable(context)){
 			final String imageKey = String.valueOf(position);
 		    final Bitmap bitmap = MainActivity.getBitmapFromMemCache(String.valueOf(sectionid)+"_"+imageKey);
 		    if (bitmap != null) {
 		    	pics.setImageBitmap(bitmap);
 		    	setPicRow(pics);
 		    } else {
-		    	RetreivePictureTask task = new RetreivePictureTask(pictures.get(position), pics, position, Integer.parseInt(sectionid));
+		    	RetrievePictureTask task = new RetrievePictureTask(pictures.get(position), pics, position, Integer.parseInt(sectionid));
 				task.execute(new String[] { pictures.get(position) });
 		    }
 		}
+		
 		
 		title.setTypeface(MainActivity.Regular);
 		title.setText(titles.get(position));
@@ -113,12 +116,12 @@ public class CustomAdapter extends ArrayAdapter<String> {
     	v.getLayoutParams().width = 150;
     }
 	
-	class RetreivePictureTask extends AsyncTask<String, Void, Drawable> {
+	class RetrievePictureTask extends AsyncTask<String, Void, Drawable> {
 	    private ImageView pics;
 	    private Integer position;
 	    private Integer groupPosition;
 
-	    public RetreivePictureTask(String url, ImageView pics, Integer position, Integer groupPosition){
+	    public RetrievePictureTask(String url, ImageView pics, Integer position, Integer groupPosition){
 	    	this.pics = pics;
 	    	this.position = position;
 	    	this.groupPosition = groupPosition;
@@ -160,6 +163,16 @@ public class CustomAdapter extends ArrayAdapter<String> {
 	        Object content = url.getContent();
 	        return content;
 	    } 
+	}
+	
+	public boolean isNetworkAvailable(Context ctx){
+	    ConnectivityManager cm = (ConnectivityManager)ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo netInfo = cm.getActiveNetworkInfo();
+	    if (netInfo != null && netInfo.isConnectedOrConnecting()&& cm.getActiveNetworkInfo().isAvailable()&& cm.getActiveNetworkInfo().isConnected()){
+	        return true;
+	    }else{
+	        return false;
+	    }
 	}
 	
 }

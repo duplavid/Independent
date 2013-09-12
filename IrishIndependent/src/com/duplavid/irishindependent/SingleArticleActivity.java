@@ -15,12 +15,16 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -56,84 +60,98 @@ public class SingleArticleActivity extends Activity {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.single_article);
 
-        try{
-            thiscontext = this;
-            pd = new ProgressDialog(thiscontext);
-            
-            Intent i = getIntent();
-            
-            SingleArticleActivity.link = i.getStringExtra("link");
-            SingleArticleActivity.lead = i.getStringExtra("lead");
-            SingleArticleActivity.title = i.getStringExtra("title");
-            SingleArticleActivity.groupPosition = i.getStringExtra("groupPosition");
-            SingleArticleActivity.childPosition = i.getStringExtra("childPosition");
-
-            //Set above title
-            TextView t = (TextView)findViewById(R.id.title);
-    		t.setText(title);
-    		t.setTypeface(MainActivity.Regular);
-    		TableRow titlerow = (TableRow)findViewById(R.id.titlerow);
-    		titlerow.setBackgroundColor(Color.parseColor(MainActivity.sections.get(Integer.parseInt(groupPosition)).getColor()));
-            
-    		//Set the down row
-    		TextView t2 = (TextView)findViewById(R.id.titleDown);
-     		t2.setText(title);
-     		t2.setTypeface(MainActivity.Regular);
-     		TableRow titlerow2 = (TableRow)findViewById(R.id.titledownrow);
-     		titlerow2.setBackgroundColor(Color.parseColor(MainActivity.sections.get(Integer.parseInt(groupPosition)).getColor()));
-             
-    		
-            //Set lead
-            TextView l = (TextView)findViewById(R.id.lead);
-    		l.setText(lead);
-    		l.setTypeface(MainActivity.Italic);
-            
-    		//Get the article, byline and piclink itself
-    		BufferedReader in = null;
-    		BufferedReader ln = null;
-    		BufferedReader bn = null;
-    		String line;
-    		StringBuilder articleBuilder = new StringBuilder();
-    		StringBuilder picBuilder = new StringBuilder();
-    		StringBuilder bylineBuilder = new StringBuilder();
-    		
-    		//Get article from cache
-            try {
-                in = new BufferedReader(new FileReader(new File(thiscontext.getCacheDir(), groupPosition+"_"+childPosition)));
-                while ((line = in.readLine()) != null) articleBuilder.append(line+"\n");
-                createArticle(articleBuilder);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                RetrieveArticle task = new RetrieveArticle();
-        		task.execute(new String[] { link });
-            } catch (IOException e) {
-            	e.printStackTrace();
-            }
-            
-            //Get byline
-            try{
-            	bn = new BufferedReader(new FileReader(new File(thiscontext.getCacheDir(), "byline_"+groupPosition+"_"+childPosition)));
-            	while ((line = bn.readLine()) != null) bylineBuilder.append(line);
-                getByline(bylineBuilder);
-            }catch(FileNotFoundException e){
-            	e.printStackTrace();
-            } catch (IOException e) {
-				e.printStackTrace();
-			}
-            
-            //Get picture
-            try{
-            	ln = new BufferedReader(new FileReader(new File(thiscontext.getCacheDir(), "piclink_"+groupPosition+"_"+childPosition)));
-            	while ((line = ln.readLine()) != null) picBuilder.append(line);
-                getPic(picBuilder);
-            }catch(FileNotFoundException e){
-            	e.printStackTrace();
-            } catch (IOException e) {
-				e.printStackTrace();
-			}
-    		
-        }catch(NullPointerException e){
-        	finish();
+        if(isNetworkAvailable() == true){
+	        try{
+	            thiscontext = this;
+	            pd = new ProgressDialog(thiscontext);
+	            
+	            Intent i = getIntent();
+	            
+	            SingleArticleActivity.link = i.getStringExtra("link");
+	            SingleArticleActivity.lead = i.getStringExtra("lead");
+	            SingleArticleActivity.title = i.getStringExtra("title");
+	            SingleArticleActivity.groupPosition = i.getStringExtra("groupPosition");
+	            SingleArticleActivity.childPosition = i.getStringExtra("childPosition");
+	
+	            //Set above title
+	            TextView t = (TextView)findViewById(R.id.title);
+	    		t.setText(title);
+	    		t.setTypeface(MainActivity.Regular);
+	    		TableRow titlerow = (TableRow)findViewById(R.id.titlerow);
+	    		titlerow.setBackgroundColor(Color.parseColor(MainActivity.sections.get(Integer.parseInt(groupPosition)).getColor()));
+	            
+	    		//Set the down row
+	    		TextView t2 = (TextView)findViewById(R.id.titleDown);
+	     		t2.setText(title);
+	     		t2.setTypeface(MainActivity.Regular);
+	     		TableRow titlerow2 = (TableRow)findViewById(R.id.titledownrow);
+	     		titlerow2.setBackgroundColor(Color.parseColor(MainActivity.sections.get(Integer.parseInt(groupPosition)).getColor()));
+	             
+	    		
+	            //Set lead
+	            TextView l = (TextView)findViewById(R.id.lead);
+	    		l.setText(lead);
+	    		l.setTypeface(MainActivity.Italic);
+	            
+	    		//Get the article, byline and piclink itself
+	    		BufferedReader in = null;
+	    		BufferedReader ln = null;
+	    		BufferedReader bn = null;
+	    		String line;
+	    		StringBuilder articleBuilder = new StringBuilder();
+	    		StringBuilder picBuilder = new StringBuilder();
+	    		StringBuilder bylineBuilder = new StringBuilder();
+	    		
+	    		//Get article from cache
+	            try {
+	                in = new BufferedReader(new FileReader(new File(thiscontext.getCacheDir(), groupPosition+"_"+childPosition)));
+	                while ((line = in.readLine()) != null) articleBuilder.append(line+"\n");
+	                createArticle(articleBuilder);
+	            } catch (FileNotFoundException e) {
+	                e.printStackTrace();
+	                RetrieveArticle task = new RetrieveArticle();
+	        		task.execute(new String[] { link });
+	            } catch (IOException e) {
+	            	e.printStackTrace();
+	            }
+	            
+	            //Get byline
+	            try{
+	            	bn = new BufferedReader(new FileReader(new File(thiscontext.getCacheDir(), "byline_"+groupPosition+"_"+childPosition)));
+	            	while ((line = bn.readLine()) != null) bylineBuilder.append(line);
+	                getByline(bylineBuilder);
+	            }catch(FileNotFoundException e){
+	            	e.printStackTrace();
+	            } catch (IOException e) {
+					e.printStackTrace();
+				}
+	            
+	            //Get picture
+	            try{
+	            	ln = new BufferedReader(new FileReader(new File(thiscontext.getCacheDir(), "piclink_"+groupPosition+"_"+childPosition)));
+	            	while ((line = ln.readLine()) != null) picBuilder.append(line);
+	                getPic(picBuilder);
+	            }catch(FileNotFoundException e){
+	            	e.printStackTrace();
+	            } catch (IOException e) {
+					e.printStackTrace();
+				}
+	    		
+	        }catch(NullPointerException e){
+	        	finish();
+	        }
+        }else{
+        	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage("Your mobile isn't connected to the internet. Please check your connection and try again.")
+			.setTitle("No connection");
+	
+			builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					finish();
+				}
+			});
+			AlertDialog dialog = builder.create();
+			dialog.show();
         }
         
     }
@@ -342,6 +360,14 @@ public class SingleArticleActivity extends Activity {
 	        Object content = url.getContent();
 	        return content;
 	    } 
+	}
+	
+	//Check for network
+	private boolean isNetworkAvailable() {
+		ConnectivityManager connectivityManager 
+			= (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+		return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
 	}
 	
 	

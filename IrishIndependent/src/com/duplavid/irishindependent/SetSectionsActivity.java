@@ -17,9 +17,8 @@ import android.view.View;
  *
  */
 public class SetSectionsActivity extends ListActivity {
-
-	static ArrayList<Section> sectionlist;
-	static DatabaseHandler db;
+	private ArrayList<Section> sectionlist;
+	private static DatabaseHandler db;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -46,7 +45,6 @@ public class SetSectionsActivity extends ListActivity {
 	
 	public static void populateDatabase(){
 		db = MainActivity.db;
-		sectionlist = new ArrayList<Section>();
 		
 		Section BreakingNews = new Section("BreakingNews", "Breaking News", "#006363", "http://www.independent.ie/breaking-news/rss", true);
 		Section WorldNews = new Section("WorldNews", "World News", "#1D7373", "http://www.independent.ie/world-news/rss", true);
@@ -145,22 +143,24 @@ public class SetSectionsActivity extends ListActivity {
 	}
 	
 	public void getBackToMain(View v){
-		Intent main = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(main);
-        
-        finish();
+		setsectionsFinished();
 	}
 	
 	@Override
     public void onBackPressed() {
         //start activity here
-        super.onBackPressed();   
-        Intent main = new Intent(getApplicationContext(), MainActivity.class);
+        super.onBackPressed();
+        
+        setsectionsFinished();
+    }
+	
+	public void setsectionsFinished(){
+		Intent main = new Intent(getApplicationContext(), MainActivity.class);
+		main.putExtra("settings", "settings");
         startActivity(main);
         
         finish();
-
-    }
+	}
 	
 	
 }

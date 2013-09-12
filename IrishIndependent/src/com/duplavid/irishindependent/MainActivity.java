@@ -1,7 +1,15 @@
 package com.duplavid.irishindependent;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +18,8 @@ import java.util.Map;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+
+import com.duplavid.irishindependent.SingleArticleActivity.RetrieveArticle;
 
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -83,30 +93,62 @@ public class MainActivity extends Activity {
 		thiscontext = this;
 		expListView = (ExpandableListView) findViewById(R.id.lvExp);
 		
-		if(isNetworkAvailable() == true){
-			pd = new ProgressDialog(this.getApplicationContext());
-			db = new DatabaseHandler(this);
-	
-			//Set typefaces
-			Regular = Typeface.createFromAsset(this.getAssets(),"fonts/DroidSerif-Regular.ttf");
-			Bold = Typeface.createFromAsset(this.getAssets(),"fonts/DroidSerif-Bold.ttf");
-			Italic = Typeface.createFromAsset(this.getAssets(),"fonts/DroidSerif-Italic.ttf");
+		sections = new ArrayList<Section>();
 		
-			getRSS();
-		}else{
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage("Your mobile isn't connected to the internet. Please check your connection and try again.")
-			.setTitle("No connection");
+		pd = new ProgressDialog(this.getApplicationContext());
+		db = new DatabaseHandler(this);
 
-			builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int id) {
-					finish();
-				}
-			});
-			AlertDialog dialog = builder.create();
-			dialog.show();
+		//Set typefaces
+		Regular = Typeface.createFromAsset(this.getAssets(),"fonts/DroidSerif-Regular.ttf");
+		Bold = Typeface.createFromAsset(this.getAssets(),"fonts/DroidSerif-Bold.ttf");
+		Italic = Typeface.createFromAsset(this.getAssets(),"fonts/DroidSerif-Italic.ttf");
+	
+		//Check if the came from the Settings list
+		Intent i = getIntent();
+
+		if(i.hasExtra("settings") ){
+			if(isNetworkAvailable() == true){
+				getRSS();
+			}else{
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setMessage("Without connection, the section list can't be refreshed. The app will show you the latest cached sectionlist.")
+				.setTitle("No connection");
+		
+				builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+						getFromCache();
+					}
+				});
+				AlertDialog dialog = builder.create();
+				dialog.show();
+				
+			}
+			getIntent().removeExtra("settings");
+		}else{
+			//Check if there's a section cache file, if not, get the RSS
+			//Get article from cache
+			getFromCache();
 		}
 		
+	}
+	
+	public void getFromCache(){
+		try {
+            FileInputStream fis = thiscontext.openFileInput("sectioncache");
+            ObjectInputStream is = new ObjectInputStream(fis);
+            sections = (ArrayList) is.readObject();
+            is.close();
+            showList();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            getRSS();
+        } catch (IOException e) {
+        	e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	//Check for network
@@ -120,7 +162,6 @@ public class MainActivity extends Activity {
 	@Override
 	public void onResume(){
 		super.onResume();
-		//getRSS();
 	}
 
 	@Override
@@ -133,8 +174,30 @@ public class MainActivity extends Activity {
 		pd = null;
 	}
 
+	public void getRSS() {
+		if(isNetworkAvailable() == true){
+			setSections();
+			//Delete the cache every time we refresh the RSS
+			clearApplicationData();
+			pd = new ProgressDialog(this);
+			DownloadWebPageTask task = new DownloadWebPageTask(sections);
+			task.execute(urls);
+		}else{
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage("Your mobile isn't connected to the internet. Please check your connection and try again.")
+			.setTitle("No connection");
+	
+			builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.cancel();
+				}
+			});
+			AlertDialog dialog = builder.create();
+			dialog.show();
+		}
+	}
+	
 	public void setSections(){
-		sections = new ArrayList<Section>();
 		sections = db.getEnabledSections();
 			
 		//TODO: elso bejelentkezes!
@@ -156,15 +219,6 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	public void getRSS() {
-		setSections();
-		//Delete the cache every time we refresh the RSS
-		clearApplicationData();
-		pd = new ProgressDialog(this);
-		DownloadWebPageTask task = new DownloadWebPageTask(sections);
-		task.execute(urls);
-	}
-
 	/**
 	 * Populates the static <Section> ArrayList with all things that are in the RSS.
 	 * Connects to MainParser
@@ -172,16 +226,21 @@ public class MainActivity extends Activity {
 	 * @author Eva Hajdu
 	 *
 	 */
-	private class DownloadWebPageTask extends AsyncTask<String, Void, String> {
+	private class DownloadWebPageTask extends AsyncTask<String, Integer, String> {
 		
 		private ArrayList<Section> objects;
 	
 		@Override
 		protected void onPreExecute() {
+			int length = sections.size();
+			
 			pd.setTitle("Loading...");
 			pd.setMessage(pdText);
+			pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+			pd.setMax(0);
+			pd.setMax(length);
+			pd.setIndeterminate(false);
 			pd.setCancelable(true);
-			pd.setIndeterminate(true);
 			pd.show();
 		}
 
@@ -193,7 +252,7 @@ public class MainActivity extends Activity {
 		protected String doInBackground(String... urls) {
 			String response = "";
 			int j = 0;
-				
+
 			for (String url : urls) {
 				DefaultHttpClient client = new DefaultHttpClient();
 				HttpGet httpGet = new HttpGet(url);
@@ -209,19 +268,28 @@ public class MainActivity extends Activity {
 						o.titles.add(list.get(i).getTitle());
 						o.pictures.add(list.get(i).getPicture());
 					}
+					
+					publishProgress((int) j);
 					j++;
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 			return response;
 		}
+		
+		protected void onProgressUpdate(Integer... progress) {
+			pd.setProgress(0);
+			pd.setProgress(progress[0]);
+	    }
 
 		@Override
 		protected void onPostExecute(String result) {
 			if (pd != null) { 
 				pd.dismiss();
 			}
+			
 			showList();
 		}
 	}
@@ -235,7 +303,23 @@ public class MainActivity extends Activity {
 	public void showList(){
 		ArrayList<String> listDataHeader = new ArrayList<String>();
 		HashMap<String, List<String>> listDataChild = new HashMap<String, List<String>>();
-	 
+		
+		//Save cache section file
+		FileOutputStream fos;
+		try {
+			fos = thiscontext.openFileOutput("sectioncache", Context.MODE_PRIVATE);
+			ObjectOutputStream os;
+			os = new ObjectOutputStream(fos);
+			os.writeObject(MainActivity.sections);
+			os.close();
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		// Adding child data
 		for(int i=0;i<MainActivity.sections.size();i++){
 			listDataHeader.add(MainActivity.sections.get(i).getFullName());	

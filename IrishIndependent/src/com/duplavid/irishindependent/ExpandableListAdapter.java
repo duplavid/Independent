@@ -8,12 +8,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,7 +86,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 		TextView description = (TextView) rowView.findViewById(R.id.descriptionRow);
 		ImageView pics = (ImageView) rowView.findViewById(R.id.pictureRow);
 		
-		if(pictures.get(childPosition) != null){
+		if(pictures.get(childPosition) != null && isNetworkAvailable(this._context)){
+			//Check for net connection
 			final String posKey = String.valueOf(childPosition);
 			final String groupKey = String.valueOf(groupPosition);
 		    Bitmap bitmap = MainActivity.getBitmapFromMemCache(groupKey+'_'+posKey);
@@ -91,7 +96,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 		    	setPicRow(pics);
 		    	bitmap = null;
 		    } else {
-		    	RetreivePictureTask task = new RetreivePictureTask(pictures.get(childPosition), pics, childPosition, groupPosition);
+		    	RetrievePictureTask task = new RetrievePictureTask(pictures.get(childPosition), pics, childPosition, groupPosition);
 				task.execute(new String[] { pictures.get(childPosition) });
 		    }
 		}
@@ -196,12 +201,12 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         return true;
     }
     
-	class RetreivePictureTask extends AsyncTask<String, Void, Drawable> {
+	class RetrievePictureTask extends AsyncTask<String, Void, Drawable> {
 	    private ImageView pics;
 	    private Integer position;
 	    private Integer groupPosition;
 
-	    public RetreivePictureTask(String url, ImageView pics, Integer position, Integer groupPosition){
+	    public RetrievePictureTask(String url, ImageView pics, Integer position, Integer groupPosition){
 	    	this.pics = pics;
 	    	this.position = position;
 	    	this.groupPosition = groupPosition;
@@ -244,6 +249,16 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 	        Object content = url.getContent();
 	        return content;
 	    } 
+	}
+	
+    public boolean isNetworkAvailable(Context ctx){
+	    ConnectivityManager cm = (ConnectivityManager)ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo netInfo = cm.getActiveNetworkInfo();
+	    if (netInfo != null && netInfo.isConnectedOrConnecting()&& cm.getActiveNetworkInfo().isAvailable()&& cm.getActiveNetworkInfo().isConnected()){
+	        return true;
+	    }else{
+	        return false;
+	    }
 	}
     
 }
