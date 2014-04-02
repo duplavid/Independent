@@ -28,6 +28,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -82,12 +83,12 @@ public class SingleArticleActivity extends Activity {
 	            
 	    		//Set the down row
 	    		TextView t2 = (TextView)findViewById(R.id.titleDown);
-	     		t2.setText(title);
 	     		t2.setTypeface(MainActivity.Regular);
+	     		Button shareButton = (Button)findViewById(R.id.shareButton);
+	     		shareButton.setTypeface(MainActivity.Regular);
 	     		TableRow titlerow2 = (TableRow)findViewById(R.id.titledownrow);
 	     		titlerow2.setBackgroundColor(Color.parseColor(MainActivity.sections.get(Integer.parseInt(groupPosition)).getColor()));
-	             
-	    		
+	            
 	            //Set lead
 	            TextView l = (TextView)findViewById(R.id.lead);
 	    		l.setText(lead);
@@ -370,5 +371,14 @@ public class SingleArticleActivity extends Activity {
 		return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
 	}
 	
+	//Share article
+	public void shareArticle(View v){
+		Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+		sharingIntent.setType("text/plain");		
+		String shareBody = SingleArticleActivity.link+"\n\n"+SingleArticleActivity.lead;
+		sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, SingleArticleActivity.title);
+		sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+		startActivity(Intent.createChooser(sharingIntent, "Share via"));
+	}
 	
 }

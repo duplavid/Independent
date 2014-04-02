@@ -6,4 +6,6 @@
     <string name="rowImage">Image of this row</string>
     <string name="okButton">Save selection</string>
     <string name="refreshList">Save selection, refresh</string>
+    <string name="shareButton">Share article</string>
+    <string name="backtolist">Back to list</string>
 </resources>
