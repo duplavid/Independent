@@ -31,6 +31,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Shows a single article.
@@ -108,11 +109,10 @@ public class SingleArticleActivity extends Activity {
 	                while ((line = in.readLine()) != null) articleBuilder.append(line+"\n");
 	                createArticle(articleBuilder);
 	            } catch (FileNotFoundException e) {
-	                e.printStackTrace();
 	                RetrieveArticle task = new RetrieveArticle();
 	        		task.execute(new String[] { link });
 	            } catch (IOException e) {
-	            	e.printStackTrace();
+	            	//e.printStackTrace();
 	            }
 	            
 	            //Get byline
@@ -138,6 +138,7 @@ public class SingleArticleActivity extends Activity {
 				}
 	    		
 	        }catch(NullPointerException e){
+	        	Toast.makeText(thiscontext, "We're sorry, there's an error in this article, it can't be opened.", Toast.LENGTH_SHORT).show();
 	        	finish();
 	        }
         }else{
@@ -213,31 +214,17 @@ public class SingleArticleActivity extends Activity {
 			try {
 				doc = Jsoup.connect(urls[0]).get();
 				
-				if(doc.select(".byline") != null){
-					extraArticle = doc.select(".byline");
+				if(doc.select(".date") != null){
+					extraArticle = doc.select(".date");
 				}
 				
-				article = doc.select(".w50 p:not(.byline)");
+				article = doc.select(".body p:not(.date, .lead)");
 				
 				if(doc.select(".imgWrapper img").first() != null){
 					picture = doc.select(".imgWrapper img").first().attr("src");
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
-				countTry++;
-				if(countTry > 1){
-					finish();
-				}else{
-					Intent intent = getIntent();
-					intent.putExtra(link, SingleArticleActivity.link);
-					intent.putExtra(lead, SingleArticleActivity.lead);
-					intent.putExtra(title, SingleArticleActivity.title);
-					intent.putExtra(groupPosition, SingleArticleActivity.groupPosition);
-					intent.putExtra(childPosition, SingleArticleActivity.childPosition);
-					countTry++;
-					finish();
-					startActivity(intent);
-				}
+				cancelArticle();
 			}
 			return article;
 		}
@@ -249,15 +236,7 @@ public class SingleArticleActivity extends Activity {
 			}
 			
 			if(result == null){
-				Intent intent = getIntent();
-				intent.putExtra(link, SingleArticleActivity.link);
-				intent.putExtra(lead, SingleArticleActivity.lead);
-				intent.putExtra(title, SingleArticleActivity.title);
-				intent.putExtra(groupPosition, SingleArticleActivity.groupPosition);
-				intent.putExtra(childPosition, SingleArticleActivity.childPosition);
-				
-				finish();
-				startActivity(intent);
+				cancelArticle();
 			}else{
 				StringBuilder article = new StringBuilder();
 				for(int i=0;i<result.size();i++){
@@ -276,7 +255,6 @@ public class SingleArticleActivity extends Activity {
 			        e.printStackTrace();
 			    }
 			    
-				
 				//Get byline
 				if(extraArticle != null){
 					StringBuilder byline = new StringBuilder();
@@ -312,6 +290,26 @@ public class SingleArticleActivity extends Activity {
 				        e.printStackTrace();
 				    }
 				}
+			}
+		}
+		
+		private void cancelArticle(){
+			countTry++;
+			System.out.println(countTry);
+			if(countTry > 1){
+				cancel(true);
+				finish();
+				Toast.makeText(thiscontext, "We're sorry, there's an error in this article, it can't be opened.", Toast.LENGTH_SHORT).show();
+			}else{
+				Intent intent = getIntent();
+				intent.putExtra(link, SingleArticleActivity.link);
+				intent.putExtra(lead, SingleArticleActivity.lead);
+				intent.putExtra(title, SingleArticleActivity.title);
+				intent.putExtra(groupPosition, SingleArticleActivity.groupPosition);
+				intent.putExtra(childPosition, SingleArticleActivity.childPosition);
+				countTry++;
+				finish();
+				startActivity(intent);
 			}
 		}
 		

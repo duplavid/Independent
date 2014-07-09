@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 /**
  * Connects to SetSectionsActivity
- * @res activity_sections
+ * @res activity_sections, list_sectionlist
  * @author Eva Hajdu
  *
  */
@@ -50,7 +50,6 @@ public class SectionActivityAdapter extends ArrayAdapter<String> {
 		checkBox.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 if(checkBox.isChecked()){
                 	MainActivity.db.updateState((position+1), true);
                 }else{

@@ -179,6 +179,7 @@ public class MainActivity extends Activity {
 			setSections();
 			//Delete the cache every time we refresh the RSS
 			clearApplicationData();
+			mMemoryCache.evictAll();
 			pd = new ProgressDialog(this);
 			DownloadWebPageTask task = new DownloadWebPageTask(sections);
 			task.execute(urls);
@@ -373,6 +374,7 @@ public class MainActivity extends Activity {
 	public void settings(){
 		Intent intent = new Intent(this.getApplicationContext(), SetSectionsActivity.class);
 		startActivity(intent);
+		finish();
 	}
 
 	//Caching images
