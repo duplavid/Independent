@@ -44,52 +44,52 @@
 				</TableRow>
 			</TableLayout>
 		        
-		<TextView
-			android:id="@+id/byline"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:text=""
-			android:paddingBottom="10dp"
-			android:paddingTop="10dp"
-			android:paddingLeft="10dp"
-			android:textColor="#616161"
-			android:textAppearance="?android:attr/textAppearanceSmall" />
+			<TextView
+				android:id="@+id/byline"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:text=""
+				android:paddingBottom="10dp"
+				android:paddingTop="10dp"
+				android:paddingLeft="10dp"
+				android:textColor="#616161"
+				android:textAppearance="?android:attr/textAppearanceSmall" />
+				      
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="1dp"
+				android:background="#c8c8c8" />
 			      
-		<View
-			android:layout_width="match_parent"
-			android:layout_height="1dp"
-			android:background="#c8c8c8" />
-		      
-		<TextView
-			android:id="@+id/lead"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text=""
-			android:paddingBottom="10dp"
-			android:paddingTop="10dp"
-			android:paddingLeft="10dp"
-			android:paddingRight="10dp"
-			android:textAppearance="?android:attr/textAppearanceMedium" />
-		   
-		<ImageView 
-			android:id="@+id/articleimage"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:paddingLeft="10dp"
-			android:paddingRight="10dp"
-			android:paddingBottom="10dp"
-			android:contentDescription="@string/rowImage" />
-		
-		<TextView
-			android:id="@+id/article"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:paddingBottom="10dp"
-			android:paddingLeft="10dp"
-			android:paddingRight="10dp"
-			android:text=""
-			android:textAppearance="?android:attr/textAppearanceMedium" />
-		
+			<TextView
+				android:id="@+id/lead"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text=""
+				android:paddingBottom="10dp"
+				android:paddingTop="10dp"
+				android:paddingLeft="10dp"
+				android:paddingRight="10dp"
+				android:textAppearance="?android:attr/textAppearanceMedium" />
+			   
+			<ImageView 
+				android:id="@+id/articleimage"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:paddingLeft="10dp"
+				android:paddingRight="10dp"
+				android:paddingBottom="10dp"
+				android:contentDescription="@string/rowImage" />
+			
+			<TextView
+				android:id="@+id/article"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:paddingBottom="10dp"
+				android:paddingLeft="10dp"
+				android:paddingRight="10dp"
+				android:text=""
+				android:textAppearance="?android:attr/textAppearanceMedium" />
+			
 			<TableLayout
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content" >
@@ -113,13 +113,21 @@
 						android:layout_width="0dip"
 						android:layout_weight="5"
 						android:layout_height="wrap_content"
-						android:text=""
+						android:text="@string/backtolist"
 						android:paddingLeft="10dp"
 						android:paddingRight="10dp"
 						android:paddingBottom="10dp"
 						android:paddingTop="10dp"
 						android:textColor="#ffffff"
 						android:textAppearance="?android:attr/textAppearanceLarge" />
+					
+					<Button
+					    android:id="@+id/shareButton"
+					    android:layout_width="wrap_content"
+					    android:layout_height="wrap_content"
+					    android:onClick="shareArticle"
+					    android:text="@string/shareButton"
+					    android:textColor="#ffffff" />
 					
 				</TableRow>
 			</TableLayout>

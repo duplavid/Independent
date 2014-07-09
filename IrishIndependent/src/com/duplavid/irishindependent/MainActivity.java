@@ -96,6 +96,7 @@ public class MainActivity extends Activity {
 		sections = new ArrayList<Section>();
 		
 		pd = new ProgressDialog(this.getApplicationContext());
+		pd.setCancelable(false);
 		db = new DatabaseHandler(this);
 
 		//Set typefaces
@@ -241,7 +242,7 @@ public class MainActivity extends Activity {
 			pd.setMax(0);
 			pd.setMax(length);
 			pd.setIndeterminate(false);
-			pd.setCancelable(true);
+			pd.setCancelable(false);
 			pd.show();
 		}
 
@@ -281,8 +282,10 @@ public class MainActivity extends Activity {
 		}
 		
 		protected void onProgressUpdate(Integer... progress) {
-			pd.setProgress(0);
-			pd.setProgress(progress[0]);
+			if(pd != null){
+				pd.setProgress(0);
+				pd.setProgress(progress[0]);
+			}
 	    }
 
 		@Override
